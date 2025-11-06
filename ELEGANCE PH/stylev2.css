@@ -1,0 +1,796 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+  box-sizing: border-box; 
+}
+
+html,
+body {
+  font-family: "Poppins", sans-serif; 
+  margin: 0;
+  padding: 0;
+  padding-top: 120px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+/* --- Header e Navegação --- */
+.menu {
+  background-color: black;
+  width: 100%;
+  height: 160px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-bottom: 8px solid #D99E52;
+  z-index: 1000; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5%; 
+}
+
+.logo {
+  height: 160px;
+  width: auto;
+  position: relative;
+}
+
+.menuSub {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.grupo1 {
+  display: flex;
+  align-items: center;
+  gap: 3vw;
+}
+
+.topicos {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+
+.topicos:hover {
+  color: #D99E52;
+}
+
+.grupo2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px; 
+}
+
+.grupo2 .nav-icon[href="login.html"] {
+  display: none;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box .button {
+  width: 350px; 
+  height: 50px; 
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: transparent;
+  color: white;
+  padding-left: 20px;
+  padding-right: 45px;
+  outline: none;
+  font-size: 1rem; 
+}
+
+.search-box .button::placeholder {
+  color: #ccc;
+}
+
+.search-box .lupa {
+  position: absolute;
+  right: 15px; 
+  top: 50%;
+  transform: translateY(-50%);
+  height: 30px; 
+}
+
+.search-box .lupa img {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+
+.nav-icon img {
+  height: 40px; 
+  width: auto;
+  display: block; 
+}
+
+
+.lupa,
+.filtro,
+.menuMobile {
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+
+.menuMobile {
+  display: none; 
+}
+
+.cont {
+  display: none; 
+  position: fixed;
+  top: 168px; 
+  left: 0;
+  width: 100%;
+  background-color: black;
+  z-index: 999;
+  border-bottom: 4px solid #D99E52;
+}
+
+.Mobil {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.Mob {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/* --- Conteúdo Principal --- */
+.logos {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; 
+  width: 100%;
+  gap: 5%;
+  margin-top: 30px; 
+}
+
+.logos img {
+  width: 10%;
+  min-width: 80px; 
+  height: auto;
+}
+
+.txtprd {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+  font-size: 2.5rem; 
+}
+
+/* --- Seção de Produtos (Layout Original) --- */
+.produtos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10vh 1%; 
+  margin-top: 10%;  
+}
+
+.produto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%; 
+  max-width: 90%;
+}
+
+.produto a {
+  display: block;
+  width: 80%; 
+  height: 50vh; 
+}
+
+.produto a img {
+  width: 80%; 
+  height: 100%; 
+  object-fit: cover;
+  border-radius: 1.5vw; 
+}
+
+/* --- Rodapé --- */
+.rodape {
+  background-color: black;
+  margin-top: 5%;
+  padding: 0; 
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.barra-amarelaBaix {
+  background-color: #D99E52;
+  height: 8px; 
+  width: 100%;
+  display: block;
+}
+
+.contRodape {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5%;
+  padding: 3% 0;
+  flex-grow: 1; 
+}
+
+.logoRodap,
+  .logoRodapeDir {
+    height: 250px; 
+  }
+
+.txtRodape {
+  color: white;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0; 
+  background-color: black;
+  font-size: 1rem; 
+}
+
+.direitos {
+  color: white;
+  max-width: 90%; 
+  margin: 0 auto;
+}
+
+/* --- Botão Flutuante WhatsApp --- */
+.WhtsAppFixo {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.WhtsAppFixo img {
+  width: 50px;
+  height: auto;
+  transition: transform 0.2s;
+}
+
+.WhtsAppFixo img:hover {
+  transform: scale(1.1);
+}
+
+/* --- ESTILOS DA PÁGINA DE PRODUTOS --- */
+
+.container {
+  display: flex;
+  width: 95%;
+  margin: 0 auto;
+  gap: 2%;
+}
+
+
+.container1 {
+  width: 25%;
+  border: 5px solid #000000;
+  border-radius: 5px;
+  height: 100%; 
+  padding: 15px;
+}
+
+.barra {
+  width: auto;
+  height: auto;
+}
+
+.Ord {
+  display: flex;
+  width: 100%;
+  gap: 5%;
+  align-items: center;
+}
+
+.MaisVendido {
+  width: 50%;
+  height: 35px; 
+  border-radius: 4px;
+}
+
+.valor {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.valor input {
+  width: 5vw;
+  min-width: 60px;
+  height: 4vh;
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 10px;
+  background-color: transparent;
+  text-align: center;
+  color: rgb(0, 0, 0);
+}
+
+
+.filtra {
+  display: none; 
+}
+
+
+.flutuante {
+  position: relative;
+  display: inline-block;
+}
+
+.opcoes {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: rgb(0, 0, 0);
+  width: 200px;
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  z-index: 1001; 
+}
+
+.opcoes1 {
+  gap: 5%;
+  border-left: 3px solid #D99E52;
+  border-right: 3px solid #D99E52;
+  border-bottom: 3px solid #D99E52;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 15px;
+}
+
+.op {
+  color: white;
+  gap: 5%;
+}
+
+.marcs {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  color: white;
+}
+.marcs h4 {
+  margin: 5px 0; 
+}
+
+
+/* Mini Carrinho no Menu */
+#carrinho {
+  position: relative;
+  color: white;
+}
+
+#carrinho .nav-icon {
+  cursor: pointer; 
+}
+
+#miniCarrinhoContainer {
+  position: absolute;
+  top: 120%; 
+  right: 0;
+  width: 250px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-left: 3px solid #D99E52;
+  border-right: 3px solid #D99E52;
+  border-bottom: 3px solid #D99E52;
+  background-color: black;
+  padding: 10px;
+  z-index: 1001;
+}
+
+#miniCarrinhoContainer button {
+  width: 100%;
+  margin-top: 5px;
+}
+
+.produto img {
+  width: 80%;
+  height: 50vh;
+  object-fit: cover;
+  border-radius: 1.5vw;
+  cursor: pointer; 
+  transition: transform 0.2s;
+}
+
+.produto img:hover {
+  transform: scale(1.03); 
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 1000px;
+  height: 700px;
+  max-width: 90%;
+  max-height: 90%;
+  text-align: left;
+  position: relative; 
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.popup img {
+  max-width: 60%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 50px;
+  margin-left: 20px;
+}
+.info label {
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+.fechar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #000000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.comprar {
+  padding: 15px 20px;
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  width: 100%;
+}
+
+/* --- ESTILOS PÁGINA QUEM SOMOS --- */
+.oi h2 {
+  text-align: center;
+}
+
+.oi p {
+  font-size: large;
+  text-align: justify;
+}
+
+.titulo1 {
+  padding-top: 3vw;
+  padding-bottom: 0vw;
+}
+
+.divOi {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.texto1,
+.texto2,
+.texto3,
+.texto4,
+.texto5 {
+  width: 60%;
+  margin: auto;
+  padding-bottom: 2vw;
+}
+
+/* --- ESTILOS PÁGINAS DE TEXTO (Quem Somos, Frete, etc.) --- */
+
+.text-content {
+  max-width: 60%; 
+  margin: 0 auto; 
+}
+
+.text-content h2 {
+  text-align: center;
+}
+
+.text-content h4 {
+  font-weight: 700; 
+}
+
+.text-content p {
+  margin-top: 1.5em; 
+  text-align: left; 
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.text-content .texto18 {
+  font-weight: 700;
+  color: #333;
+}
+
+.oi.text-content p {
+  width: 100%; 
+  max-width: 100%;
+}
+
+/* --- ESTILOS PÁGINA CARRINHO --- */
+.cart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 3% 0; 
+}
+
+.carrinho {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 2px solid black;
+  border-radius: 12px;
+  width: 60%;
+  margin-top: 3%;
+  padding: 20px;
+  min-height: 400px; 
+}
+
+.carrinho .finalizar {
+  margin-top: auto; 
+  padding-top: 30px;
+}
+
+.carrinho .compra,
+.carrinho .limpar {
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 5px 20px;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.carrinho .compra:hover,
+.carrinho .limpar:hover {
+  background-color: #f0f0f0;
+}
+
+/* --- Media Query (Responsivo) --- */
+@media (max-width: 768px) {
+
+  html,
+  body {
+    padding-top: 80px; 
+  }
+
+  .menu {
+    height: 100px; 
+    border-bottom-width: 4px;
+    padding: 0 4%;
+  }
+
+  .topicos {
+    display: none; 
+  }
+
+  .menuMobile {
+    display: block; 
+  }
+
+  .menuMobile img {
+    height: 40px; 
+  }
+
+  .grupo2 {
+    display: none;
+  }
+
+  .cont {
+    top: 104px; 
+  }
+
+  .logos {
+    gap: 3%;
+    margin-top: 20px;
+  }
+
+  .logos img {
+    width: 15%; 
+    padding: 0 2%;
+    min-width: 60px;
+  }
+
+  .txtprd {
+    font-size: 1.8rem;
+    margin-top: 8%;
+  }
+
+  .produtos {
+    width: 100%;
+    gap: 10px;
+    padding: 0 10px;
+    margin-top: 8%;
+  }
+
+  .produto {
+    width: 48%; 
+    min-width: 0;
+    margin-bottom: 10px;
+  }
+
+  .produto a img {
+    border-radius: 10px;
+  }
+
+  .contRodape {
+    gap: 8%;
+    padding: 5% 0;
+  }
+
+  .imgrodape {
+    height: 70px; 
+  }
+
+  .logoRodap,
+  .logoRodapeDir {
+    height: 150px;
+  }
+
+  .txtRodape {
+    font-size: 0.85rem; 
+  }
+
+  .direitos {
+    max-width: 95%;
+  }
+
+  .container {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .container1 {
+    display: none;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .filtra {
+    display: block;
+    background: black;
+    border: 3px solid #D99E52;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 60px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+  .filtra img {
+    width: 60%;
+  }
+
+  .produtos {
+    width: 100%;
+    margin-top: 5%;
+  }
+
+  .produto img {
+    width: 90%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1.5vw;
+  }
+  
+  .valor {
+    width: 100%;
+  }
+  
+  .mobil {
+    display: flex;
+    gap: 15%;
+    margin-left: 5%;
+    flex-direction: column;
+  }
+
+  .popup-content {
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+  }
+  .popup img {
+    max-width: 100%;
+    height: 300px;
+  }
+  .info {
+    margin: 10px 0;
+    width: 100%;
+  }
+  .fechar {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+  }
+
+  .texto1,
+  .texto2,
+  .texto3,
+  .texto4,
+  .texto5 {
+    width: 90%; 
+    text-align: left; 
+  }
+
+  .text-content {
+    max-width: 95%; 
+    padding: 2%;
+  }
+
+  .text-content p {
+    text-align: left; 
+  }
+
+  .carrinho {
+    width: 95%;
+    margin-top: 5%;
+  }
+}
+
+.barra-amarela {
+  display: none;
+}

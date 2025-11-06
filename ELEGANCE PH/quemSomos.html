@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Imagens/ICON ELEGANCE PH.PNG">
+  <link rel="stylesheet" href="stylev2.css">
+  <title>Quem Somos - Elegance PH</title>
+</head>
+
+<body>
+
+  <header class="menu">
+    <img class="logo" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Elegance">
+
+    <div class="grupo1">
+      <button class="menuMobile" onclick="mostrarMenu()"><img src="Imagens/Menu.png" alt="Menu"></button>
+      <a class="topicos" href="home.html">Início</a>
+      <a class="topicos" href="produto.html">Produtos</a>
+      <a class="topicos" href="quemSomos.html">Quem somos</a>
+      <a class="topicos" href="pfrete.html">Politica de frete</a>
+    </div>
+
+    <div class="grupo2">
+      <div class="search-box">
+        <input class="button" type="text" name="pesquisa" placeholder="O que está buscando?">
+        <button class="lupa" onclick="botaolupa()">
+          <img id="lupa" src="Imagens/ICON LUPA.png" alt="Buscar">
+        </button>
+      </div>
+      <a class="sacola nav-icon" href="carrinho.html">
+        <img src="Imagens/ICON SACOLA DE COMPRA.png" alt="Sacola">
+      </a>
+    </div>
+  </header>
+
+  <div class="cont" id="cont">
+    <div class="Mobil">
+      <a class="Mob" href="home.html">Início</a><br><br>
+      <a class="Mob" href="produto.html">Produtos</a><br><br>
+      <a class="Mob" href="quemSomos.html">Quem somos</a><br><br>
+      <a class="Mob" href="pfrete.html">Politica de frete</a>
+    </div>
+  </div>
+
+  <div class="oi">
+    <h2 class="titulo1">Quem Somos - Elegance PH</h2>
+    <div class="divOi">
+      <p class="texto1">Seja bem-vindo à Elegance PH! Somos uma loja movida por estilo, identidade e atitude.
+        Fundada por Pietro Henrique, nossa missão é oferecer o melhor da moda urbana — tênis, roupas e
+        acessórios — para quem carrega orgulho de suas raízes e quer expressar sua essência com autenticidade.
+      </p>
+    </div>
+
+    <h2 class="titulo2">A Nossa História</h2>
+    <div class="divOi">
+      <p class="texto2">Tudo começou com a ideia de unir duas paixões da vida de Pietro: a moda e o corre de todo dia.
+        Com o tempo, ele percebeu que vestir-se bem vai além da estética — é uma forma de representar a
+        cultura, contar histórias e afirmar quem você é. Assim nasceu a Elegance PH: uma marca com
+        propósito, que leva as tendências mais originais e verdadeiras pra você vestir sua identidade com
+        confiança.
+      </p>
+    </div>
+
+    <h2 class="titulo3">A Nossa Missão</h2>
+    <div class="divOi">
+      <p class="texto3">
+        Nossa missão é destacar e valorizar a essência única de cada pessoa, proporcionando uma experiência de
+        compra marcante e oferecendo produtos de qualidade que traduzem o verdadeiro espírito das ruas, das
+        comunidades
+        e das histórias reais.</p>
+    </div>
+
+    <h2 class="titulo4">O Que Oferecemos</h2>
+    <div class="divOi">
+      <p class="texto4">Na Elegance PH, você
+        encontra uma curadoria especial de tênis, roupas, bonés e acessórios com influência da moda urbana e das
+        tendências atuais.
+        Trabalhamos com marcas reconhecidas e também damos espaço para talentos locais, criando coleções exclusivas
+        com significado, atitude e representatividade.</p>
+    </div>
+
+    <h2 class="titulo5">Gratidão</h2>
+    <div class="divOi">
+      <p class="texto5">Somos gratos a todos que fazem parte dessa caminhada — clientes, parceiros e colaboradores.
+        Cada conquista é resultado da confiança e do apoio que recebemos. Seguimos juntos, com muito estilo e
+        propósito,
+        fazendo nosso corre valer a pena.
+
+        Pietro Henrique e equipe Elegance PH</p>
+    </div>
+  </div>
+
+  <a class="WhtsAppFixo" href="https://wa.me/5513991462611" target="_blank">
+    <img src="Imagens/zap.png" alt="WhatsApp">
+  </a>
+
+  <footer class="rodape">
+    <div class="barra-amarelaBaix"></div>
+    <div class="contRodape">
+      <img class="logoRodap" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Rodapé">
+      <a class="instagram" href="https://www.instagram.com/_eleganceph?igsh=ajlmOW9zZTE4cnAw" target="_blank">
+        <img src="Imagens/ICON INSTAGRAM.png" alt="Instagram">
+      </a>
+      <a class="whatsApp" href="https://wa.me/5513991462611" target="_blank">
+        <img src="Imagens/zap.png" alt="WhatsApp">
+      </a>
+      <img class="logoRodapeDir" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Rodapé">
+    </div>
+    <div class="txtRodape">
+      <p class="direitos">Copyright Elegance PH Santos - 2025 - Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <script>
+    function mostrarMenu() {
+      var menu = document.getElementById("cont");
+      if (menu.style.display === "block") {
+        menu.style.display = "none";
+      } else {
+        menu.style.display = "block";
+      }
+    }
+
+    // Função de busca (pode deixar como alerta por enquanto)
+    function botaolupa() {
+      alert("Função de busca ainda não implementada!");
+    }
+  </script>
+</body>
+</html>

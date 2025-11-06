@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Imagens/ICON ELEGANCE PH.PNG">
+  <link rel="stylesheet" href="stylev2.css">
+  <title>Produtos - Elegance PH</title>
+</head>
+
+<body>
+
+  <header class="menu">
+    <img class="logo" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Elegance">
+
+    <div class="grupo1">
+      <button class="menuMobile" onclick="mostrarMenu()"><img src="Imagens/Menu.png" alt="Menu"></button>
+      <a class="topicos" href="home.html">Início</a>
+      
+      <div class="flutuante" onmouseover="mousedentro()" onmouseout="mousefora()">
+        <a class="topicos" href="produto.html">Produtos</a>
+        <div class="opcoes">
+          <div class="opcoes1" style="display: none;" id="mousecima">
+            <div class="marcs">
+              <h4 class="op">Marcas</h4>
+              <h4>Nike</h4>
+              <h4>Hugo Boss</h4>
+              <h4>Mizuno</h4>
+              <h4>Puma</h4>
+            </div>
+            <div class="marcs">
+              <h4 class="op">Tipos</h4>
+              <h4 class="op">Camisetas</h4>
+              <h4 class="op">Bermudas</h4>
+              <h4 class="op">Kits</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <a class="topicos" href="quemSomos.html">Quem somos</a>
+      <a class="topicos" href="pfrete.html">Politica de frete</a>
+    </div>
+
+    <div class="grupo2">
+      <div class="search-box">
+        <input class="button" type="text" name="pesquisa" placeholder="O que está buscando?">
+        <button class="lupa" onclick="botaolupa()">
+          <img id="lupa" src="Imagens/ICON LUPA.png" alt="Buscar">
+        </button>
+      </div>
+
+      <div id="carrinho">
+        <img src="Imagens/ICON SACOLA DE COMPRA.png" class="nav-icon" onclick="verMiniCarrinho()" alt="Carrinho" style="width: 40px; height: auto;">
+        <div id="miniCarrinhoContainer" style="display: none;">
+          <h3>Seu Mini Carrinho</h3>
+          <div id="miniCarrinhoItens">
+            <p>Seu carrinho está vazio.</p>
+          </div>
+          <p>Total: R$ <span id="miniCarrinhoTotal">0.00</span></p>
+          <a href="" class="clink" onclick="comprarminicarrinho()"><button style="background-color: white; width: 100%;">Comprar</button> </a>
+          <button onclick="limparMiniCarrinho()" style="background-color: white;">Limpar Carrinho</button>
+          <button onclick="fecharMiniCarrinho()" style="background-color: white;">Fechar</button>
+        </div>
+      </div>
+      
+    </div>
+  </header>
+
+  <button class="filtra" onclick="mostrar()"><img src="Imagens/filtro.png" alt="Filtrar"></button>
+
+  <div class="container">
+    
+    <div class="container1" id="container">
+      <div class="barra">
+        <h2>Camisetas</h2>
+        <div class="Ord">
+          <h2 class="txtOrd">Ordernar por</h2>
+          <select class="MaisVendido" name="MaisVendido" id="">
+            <option value="">Mais Vendidos</option>
+            <option value="">Nike</option>
+            <option value="">Hugo Boss</option>
+            <option value="">Mizuno</option>
+            <option value="">Puma</option>
+          </select>
+        </div>
+
+        <h2>Filtrar por</h2>
+        <h3>Tamanho</h3>
+        <div class="P">
+          <input type="checkbox"> <label for="checkbox">P</label>
+        </div>
+        <br>
+        <div class="M">
+          <input type="checkbox"> <label for="checkbox">M</label>
+        </div>
+        <br>
+        <div class="G">
+          <input type="checkbox"> <label for="checkbox">G</label>
+        </div>
+        <br>
+        <div class="GG">
+          <input type="checkbox"> <label for="checkbox">GG</label>
+        </div>
+        <br>
+        <div class="2GG">
+          <input type="checkbox"> <label for="checkbox">2GG</label>
+        </div>
+        <h2>Preço</h2>
+        <div class="valor">
+          <h2>De</h2>
+          <input class="de" type="text">
+          <h2>Até</h2>
+          <input class="ate" type="text">
+        </div>
+      </div>
+    </div>
+
+    <div class="produtos">
+      <div class="produto">
+        <img src="Imagens/FOTO 1.PNG" alt="Camiseta Nike Just Do It" onclick="abririmagem('Imagens/FOTO 1.PNG','Camiseta Nike Just Do IT', 'https://wa.me/5513991462611?text=Olá fiquei interessado na Camiseta Nike Just Do It', '70.00')" />
+      </div>
+      <div class="produto">
+        <img src="Imagens/FOTO 2.PNG" alt="Camiseta Hugo Boss Black" onclick="abririmagem('Imagens/FOTO 2.PNG','Camiseta Hugo Boss Black', 'https://wa.me/5513991462611?text=Olá fiquei interessado na Camiseta Hugo Boss Black', '70.00')" />
+      </div>
+      <div class="produto">
+        <img src="Imagens/FOTO 3.PNG" alt="Camiseta Nike Multi-Color Logo Black" onclick="abririmagem('Imagens/FOTO 3.PNG','Camiseta Nike Multi-Color Logo Black', 'https://wa.me/5513991462611?text=Olá fiquei interessado na Camiseta Nike Multi-Color Logo Black', '70.00')" />
+      </div>
+      <div class="produto">
+        <img src="Imagens/ICON MAIS VENDIDO 1.PNG" alt="Camiseta Nike Air preta" onclick="abririmagem('Imagens/ICON MAIS VENDIDO 1.PNG','Camiseta Nike Air preta', 'https://wa.me/5513991462611?text= Olá fiquei interessado na Camiseta Nike Air preta', '70.00')" />
+      </div>
+      <div class="produto">
+        <img src="Imagens/ICON MAIS VENDIDO 2.PNG" alt="Kit Hugo Boss" onclick="abririmagem('Imagens/ICON MAIS VENDIDO 2.PNG','Kit hugo boss camiseta branca e bermuda preta', 'https://wa.me/5513991462611?text=Olá Fiquei interessado no Kit hugo boss camiseta branca e bermuda preta', '70.00')" />
+      </div>
+      <div class="produto">
+        <img src="Imagens/ICON MAIS VENDIDO 3.PNG" alt="Camiseta Nike athletic" onclick="abririmagem('Imagens/ICON MAIS VENDIDO 3.PNG','Camiseta Nike athletic', 'https://wa.me/5513991462611?text=Olá Fiquei interessado na Camiseta Nike athletic', '70.00')" />
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay" class="overlay">
+    <div class="popup" onclick="event.stopPropagation()">
+      <button class="fechar" onclick="fecharimagem()">X</button>
+      <div class="popup-content">
+        <img id="imagem-grande" alt="">
+        <div class="info">
+          <h3 id="descricao" class="descricao"></h3>
+          <h3 id="preco"></h3>
+          <label>P<input type="radio" name="tamanho" value="P"></label>
+          <label>M<input type="radio" name="tamanho" value="M"></label>
+          <label>G<input type="radio" name="tamanho" value="G"></label>
+          <label>GG<input type="radio" name="tamanho" value="GG"></label>
+          <br>
+          <a href="" id="vlink" onclick="comprar()"><button class="comprar">Comprar</button></a>
+          <button class="comprar" onclick="carrinho()">Colocar no carrinho</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a class="WhtsAppFixo" href="https://wa.me/5513991462611" target="_blank">
+    <img src="Imagens/zap.png" alt="WhatsApp">
+  </a>
+
+  <footer class="rodape">
+    <div class="barra-amarelaBaix"></div>
+    <div class="contRodape">
+      <img class="logoRodap" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Rodapé">
+      <a class="instagram" href="https://www.instagram.com/_eleganceph?igsh=ajlmOW9zZTE4cnAw" target="_blank">
+        <img src="Imagens/ICON INSTAGRAM.png" alt="Instagram" class="imgrodape">
+      </a>
+      <a class="whatsApp" href="https://wa.me/5513991462611" target="_blank">
+        <img src="Imagens/zap.png" alt="WhatsApp" class="imgrodape">
+      </a>
+      <img class="logoRodapeDir" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Rodapé">
+    </div>
+    <div class="txtRodape">
+      <p class="direitos">Copyright Elegance PH Santos - 2025 - Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <script src="Eleganceph.js"></script>
+</body>
+
+</html>
