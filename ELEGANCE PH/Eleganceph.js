@@ -1,10 +1,25 @@
 
-function mostrar() {
-    document.getElementById("container").style.display = "block";
+  function mostrarMenu() {
+    var menu = document.getElementById("cont");
+    if (menu.style.display === "block") {
+      menu.style.display = "none";
+    } else {
+      menu.style.display = "block";
+    }
   }
 
-  function mostrarMenu() {
-    document.getElementById("cont").style.display = "block";
+  function mostrar() {
+    var menu = document.getElementById("container");
+    if (menu.style.display === "block") {
+      menu.style.display = "none";
+    } else {
+       menu.style.display = "block";
+    }
+  }
+
+    // Você precisará criar esta função
+  function botaolupa() {
+    alert("Função de busca ainda não implementada!");
   }
 
   linkbase = "";

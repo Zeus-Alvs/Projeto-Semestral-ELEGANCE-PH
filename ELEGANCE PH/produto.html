@@ -52,21 +52,37 @@
       </div>
 
       <div id="carrinho">
-        <img src="Imagens/ICON SACOLA DE COMPRA.png" class="nav-icon" onclick="verMiniCarrinho()" alt="Carrinho" style="width: 40px; height: auto;">
-        <div id="miniCarrinhoContainer" style="display: none;">
-          <h3>Seu Mini Carrinho</h3>
-          <div id="miniCarrinhoItens">
-            <p>Seu carrinho está vazio.</p>
-          </div>
-          <p>Total: R$ <span id="miniCarrinhoTotal">0.00</span></p>
-          <a href="" class="clink" onclick="comprarminicarrinho()"><button style="background-color: white; width: 100%;">Comprar</button> </a>
-          <button onclick="limparMiniCarrinho()" style="background-color: white;">Limpar Carrinho</button>
-          <button onclick="fecharMiniCarrinho()" style="background-color: white;">Fechar</button>
-        </div>
-      </div>
+  <img src="Imagens/ICON SACOLA DE COMPRA.png" class="nav-icon" id="vercarrinho" onclick="verMiniCarrinho()" alt="Carrinho">
+
+  <div id="miniCarrinhoContainer" style="display: none;">
+    <h3>Seu Mini Carrinho</h3>
+    
+    <div id="miniCarrinhoItens">
+      <p>Seu carrinho está vazio.</p>
+    </div>
+    
+    <p>Total: R$ <span id="miniCarrinhoTotal">0.00</span></p>
+    
+    <a href="" class="clink" id="clink" onclick="comprarminicarrinho()">
+      <button class="btn-comprar">Comprar pelo WhatsApp</button>
+    </a>
+    <button class="btn-limpar" onclick="limparMiniCarrinho()">Limpar Carrinho</button>
+    <button class="btn-fechar" onclick="fecharMiniCarrinho()">Fechar</button>
+  </div>
+</div>
       
     </div>
   </header>
+
+  <div class="cont" id="cont">
+      <div class="Mobil">
+        <a class="Mob" href="home.html">Início</a>
+        <a class="Mob" href="produto.html">Produtos</a>
+        <a class="Mob" href="quemSomos.html">Quem somos</a>
+        <a class="Mob" href="pfrete.html">Politica de frete</a>
+      </div>
+    </div>
+
 
   <button class="filtra" onclick="mostrar()"><img src="Imagens/filtro.png" alt="Filtrar"></button>
 
@@ -181,6 +197,6 @@
   </footer>
 
   <script src="Eleganceph.js"></script>
-</body>
 
+</body>
 </html>

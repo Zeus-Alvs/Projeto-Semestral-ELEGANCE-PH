@@ -607,6 +607,122 @@ a {
 .carrinho .limpar:hover {
   background-color: #f0f0f0;
 }
+#carrinho {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* O ícone da sacola */
+#carrinho .nav-icon {
+  width: 35px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#carrinho .nav-icon:hover {
+  transform: scale(1.1);
+}
+
+/* O Container do Carrinho que abre/fecha */
+#miniCarrinhoContainer {
+  /* Posicionamento */
+  position: absolute;
+  top: 50px; /* Distância do topo em relação ao ícone */
+  right: -20px; /* Alinhamento à direita */
+  z-index: 2000; /* Garante que fique em cima de tudo */
+  
+  /* Visual */
+  width: 320px;
+  background-color: #000000; /* Fundo Preto */
+  border: 3px solid #D99E52; /* Borda Dourada */
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.5);
+  
+  /* Layout interno */
+  flex-direction: column;
+  gap: 15px;
+}
+
+#miniCarrinhoContainer h3 {
+  text-align: center;
+  color: #D99E52; /* Título Dourado */
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+/* Área dos itens (com barra de rolagem se encher muito) */
+#miniCarrinhoItens {
+  max-height: 250px;
+  overflow-y: auto;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+#miniCarrinhoItens p {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 5px;
+}
+
+/* Texto do Total */
+#miniCarrinhoContainer p {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: right;
+  margin: 0;
+}
+
+/* Estilização dos Botões do Carrinho */
+#miniCarrinhoContainer button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  transition: background 0.3s;
+}
+
+
+.btn-comprar {
+  background-color: #D99E52 !important; 
+  color: white !important;
+}
+.btn-comprar:hover {
+  background-color: #c48b45 !important;
+}
+
+/* Botão Limpar */
+.btn-limpar {
+  background-color: #fff !important;
+  color: black !important;
+  border: 1px solid #ccc !important;
+}
+.btn-limpar:hover {
+  background-color: #eee !important;
+}
+
+/* Botão Fechar */
+.btn-fechar {
+  background-color: transparent !important;
+  color: #bbb !important;
+  border: 1px solid #555 !important;
+}
+.btn-fechar:hover {
+  color: white !important;
+  border-color: white !important;
+}
+
 
 /* --- Media Query (Responsivo) --- */
 @media (max-width: 768px) {
@@ -639,7 +755,7 @@ a {
   }
 
   .cont {
-    top: 104px; 
+    top: 100px; 
   }
 
   .logos {
@@ -789,6 +905,12 @@ a {
     width: 95%;
     margin-top: 5%;
   }
+
+  #miniCarrinhoContainer {
+    width: 280px;
+    right: -10px;
+  }
+  
 }
 
 .barra-amarela {
