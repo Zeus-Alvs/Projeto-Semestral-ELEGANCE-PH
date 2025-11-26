@@ -22,6 +22,46 @@
     alert("Função de busca ainda não implementada!");
   }
 
+  window.addEventListener("scroll", function() {
+    let header = document.querySelector('.menu');
+    // Se rolar mais de 50px, adiciona a classe 'menu-compact'
+    if (window.scrollY > 50) { 
+      header.classList.add('menu-compact');
+    } else {
+      header.classList.remove('menu-compact');
+    }
+  });
+    // --- LÓGICA DO MEGA MENU ---
+
+    // 1. Abrir/Fechar o Menu Geral
+    function toggleMegaMenu() {
+        const menu = document.getElementById('megaMenu');
+        menu.classList.toggle('ativo');
+    }
+
+    // 2. Trocar de Marca (Hover)
+    function ativarMarca(idConteudo, elementoBola) {
+        // Remove a classe .active de TODAS as bolinhas
+        const todasMarcas = document.querySelectorAll('.marca-item');
+        todasMarcas.forEach(marca => marca.classList.remove('active'));
+
+        // Adiciona .active SÓ na bolinha que o mouse passou
+        elementoBola.classList.add('active');
+
+        // Esconde TODOS os conteúdos de texto
+        const todosConteudos = document.querySelectorAll('.mm-conteudo');
+        todosConteudos.forEach(conteudo => conteudo.classList.remove('active'));
+
+        // Mostra SÓ o conteúdo correspondente ao ID passado
+        const conteudoAlvo = document.getElementById(idConteudo);
+        if (conteudoAlvo) {
+            conteudoAlvo.classList.add('active');
+        }
+    }
+    
+    // --- (MANTENHA SEU CÓDIGO DE SCROLL AQUI EMBAIXO) ---
+    // ...
+
   linkbase = "";
   function abririmagem(src, descricao, href, preco){
     document.getElementById('imagem-grande').src = src;

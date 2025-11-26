@@ -29,9 +29,25 @@
           <img id="lupa" src="Imagens/ICON LUPA.png" alt="Buscar">
         </button>
       </div>
-      <a class="sacola nav-icon" href="carrinho.html">
-        <img src="Imagens/ICON SACOLA DE COMPRA.png" alt="Sacola">
-      </a>
+      
+      <div id="carrinho">
+        <img src="Imagens/ICON SACOLA DE COMPRA.png" class="nav-icon" id="vercarrinho" onclick="verMiniCarrinho()" alt="Carrinho">
+
+      <div id="miniCarrinhoContainer" style="display: none;">
+        <h3>Seu Mini Carrinho</h3>
+    
+        <div id="miniCarrinhoItens">
+          <p>Seu carrinho está vazio.</p>
+        </div>
+    
+        <p>Total: R$ <span id="miniCarrinhoTotal">0.00</span></p>
+    
+        <a href="" class="clink" id="clink" onclick="comprarminicarrinho()">
+          <button class="btn-comprar">Comprar pelo WhatsApp</button>
+        </a>
+        <button class="btn-limpar" onclick="limparMiniCarrinho()">Limpar Carrinho</button>
+        <button class="btn-fechar" onclick="fecharMiniCarrinho()">Fechar</button>
+      </div>
     </div>
   </header>
 
@@ -154,21 +170,7 @@
     </div>
   </footer>
 
-  <script>
-    function mostrarMenu() {
-      var menu = document.getElementById("cont");
-      if (menu.style.display === "block") {
-        menu.style.display = "none";
-      } else {
-        menu.style.display = "block";
-      }
-    }
-
-    // Função de busca
-    function botaolupa() {
-      alert("Função de busca ainda não implementada!");
-    }
-  </script>
+  <script src="Eleganceph.js"></script>
 
 </body>
 </html>
