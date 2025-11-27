@@ -39,16 +39,29 @@
     </div>
 
     <div class="linha-baixo">
-        <div class="grupo-esquerda">
-            <div class="localizacao">
-                <img src="Imagens/ICON PIN.png" alt="Pin" style="height: 18px; margin-right: 5px;"> 
-                <span>Enviar para: 00000-000</span>
-            </div>
+        
+        <div class="area-esquerda-dinamica">
             
-            <div class="btn-produtos" onclick="toggleMegaMenu()">
-                <span>Produtos</span>
-                <span class="seta">&#9660;</span>
+            <div class="grupo-padrao">
+                <div class="localizacao">
+                    <img src="Imagens/ICON PIN.png" alt="Pin" style="height: 18px; margin-right: 5px;"> 
+                    <span>Enviar para: 00000-000</span>
+                </div>
+                <div class="btn-produtos" onclick="toggleMegaMenu()">
+                    <span>Produtos</span>
+                    <span class="seta">&#9660;</span>
+                </div>
             </div>
+
+            <div class="grupo-ativo">
+                <button class="btn-fechar-menu" onclick="toggleMegaMenu()">
+                    ✕ Fechar
+                </button>
+                <a href="produto.html" class="link-ver-todos">
+                    Ver todos os produtos →
+                </a>
+            </div>
+
         </div>
 
         <nav class="links-nav">
@@ -56,17 +69,13 @@
             <a class="topicos" href="pfrete.html">Política de frete</a>
         </nav>
     </div>
-  </div>
 
   <button class="menuMobile" onclick="mostrarMenu()">
     <img src="Imagens/Menu.png" alt="Menu">
   </button>
 
   <div id="megaMenu" class="mega-menu">
-      <div class="mm-header">
-          <span>Selecione a Marca</span>
-          <button class="mm-fechar" onclick="toggleMegaMenu()">✕ Fechar</button>
-      </div>
+
 
       <div class="mm-marcas">
           <div class="marca-item active" onmouseover="ativarMarca('marca1', this)">

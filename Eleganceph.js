@@ -35,28 +35,23 @@
 
     // 1. Abrir/Fechar o Menu Geral
     function toggleMegaMenu() {
-        const menu = document.getElementById('megaMenu');
-        menu.classList.toggle('ativo');
+        const header = document.querySelector('.menu');
+        // A classe .menu-aberto vai controlar tudo via CSS
+        header.classList.toggle('menu-aberto');
     }
 
-    // 2. Trocar de Marca (Hover)
+    // (Mantenha a função ativarMarca e o código de scroll iguais)
     function ativarMarca(idConteudo, elementoBola) {
-        // Remove a classe .active de TODAS as bolinhas
-        const todasMarcas = document.querySelectorAll('.marca-item');
-        todasMarcas.forEach(marca => marca.classList.remove('active'));
+       // ... código igual ao anterior ...
+       const todasMarcas = document.querySelectorAll('.marca-item');
+       todasMarcas.forEach(m => m.classList.remove('active'));
+       elementoBola.classList.add('active');
 
-        // Adiciona .active SÓ na bolinha que o mouse passou
-        elementoBola.classList.add('active');
-
-        // Esconde TODOS os conteúdos de texto
-        const todosConteudos = document.querySelectorAll('.mm-conteudo');
-        todosConteudos.forEach(conteudo => conteudo.classList.remove('active'));
-
-        // Mostra SÓ o conteúdo correspondente ao ID passado
-        const conteudoAlvo = document.getElementById(idConteudo);
-        if (conteudoAlvo) {
-            conteudoAlvo.classList.add('active');
-        }
+       const todosConteudos = document.querySelectorAll('.mm-conteudo');
+       todosConteudos.forEach(c => c.classList.remove('active'));
+       
+       const alvo = document.getElementById(idConteudo);
+       if(alvo) alvo.classList.add('active');
     }
     
     // --- (MANTENHA SEU CÓDIGO DE SCROLL AQUI EMBAIXO) ---

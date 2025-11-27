@@ -1,85 +1,81 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 /* --- Reset Global --- */
-* {
-  box-sizing: border-box; 
-}
+* { box-sizing: border-box; }
 
-html,
-body {
+html, body {
   font-family: "Poppins", sans-serif; 
   margin: 0;
   padding: 0;
-  padding-top: 80px; /* Aumentei um pouco para compensar o header maior */
+  padding-top: 130px; /* Compensação da altura do menu fixo */
   background-color: #F0F0F0;
 }
 
-a {
-  color: #F0F0F0;
-  text-decoration: none;
-}
+a { color: #F0F0F0; text-decoration: none; }
 
-/* --- Header e Navegação (MENU ALTERADO) --- */
-/* --- Header e Navegação --- */
+/* --- HEADER PRINCIPAL --- */
 .menu {
   background-color: #181818;
   width: 100%;
-  height: 130px; /* Um pouco mais alto para caber os 2 andares confortavelmente */
+  height: 130px; 
   position: fixed;
   top: 0;
   left: 0;
   border-bottom: 6px solid #D99E52;
   z-index: 1000; 
   display: flex;
-  align-items: center;
+  align-items: center; 
   padding: 0 2%;
   gap: 20px;
-
   transition: all 0.4s ease-in-out; 
 }
 
 /* Área da Logo */
 .area-logo {
-    width: 12%; /* Fixo para a logo */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 12%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
-  max-height: 110px; /* Tamanho original */
+  max-height: 110px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
-  
-  /* O SEGREDO: A transição fica aqui para funcionar na ida e na volta */
   transition: max-height 0.4s ease-in-out; 
 }
 
-/* --- CONTEÚDO PRINCIPAL (Lado Direito da Logo) --- */
+/* --- CONTEÚDO À DIREITA --- */
 .conteudo-header {
-    display: flex;
-    flex-direction: column; /* Cria os andares */
-    flex-grow: 1; /* Ocupa todo o espaço restante */
-    justify-content: center;
-    height: 100%;
-    gap: 10px; /* Espaço entre a linha de busca e a linha de links */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  
+  /* CORREÇÃO DE ESPAÇAMENTO: Ajustei para subir os elementos */
+  justify-content: center; /* Centraliza o bloco todo verticalmente */
+  gap: 10px; /* Reduzi o espaço entre a busca e a linha de baixo */
+  padding-bottom: 5px; /* Um leve respiro embaixo */
 }
 
-/* --- LINHA 1: Busca e Ícones --- */
+/* --- LINHA 1: BUSCA --- */
 .linha-topo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 30px;
+  height: 50px; 
+  position: relative;
+  z-index: 1002; 
 }
 
 .search-box {
   position: relative;
   display: flex;
   align-items: center;
-  flex-grow: 1; /* A busca estica para ocupar o espaço */
+  flex-grow: 1;
 }
 
 .search-box .button {
@@ -95,9 +91,7 @@ a {
   font-size: 1rem; 
 }
 
-.search-box .button::placeholder {
-  color: #181818;
-}
+.search-box .button::placeholder { color: #181818; }
 
 .search-box .lupa {
   position: absolute;
@@ -110,337 +104,171 @@ a {
   border: none;
   cursor: pointer;
 }
+.search-box .lupa img { height: 100%; width: auto; display: block; }
 
-.search-box .lupa img {
-  height: 100%;
-  width: auto;
-  display: block;
-}
+/* Ícones */
+.icones-topo { display: flex; align-items: center; gap: 25px; flex-shrink: 0; }
+.user-area { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.user-area img { height: 38px; width: auto; }
+.user-text { display: flex; flex-direction: column; color: #F0F0F0; line-height: 1.2; }
+.bem-vindo { font-size: 0.75rem; font-weight: 300; }
+.entrar-txt { font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
+.cart-icon { height: 38px; width: auto; cursor: pointer; transition: transform 0.2s; }
+.cart-icon:hover { transform: scale(1.1); }
 
-/* Ícones do Topo (User + Carrinho) */
-.icones-topo {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    flex-shrink: 0; /* Impede que encolham */
-}
 
-.user-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-}
-
-.user-area img {
-    height: 38px;
-    width: auto;
-}
-
-.user-text {
-    display: flex;
-    flex-direction: column;
-    color: #F0F0F0;
-    line-height: 1.2;
-}
-
-.bem-vindo {
-    font-size: 0.75rem;
-    font-weight: 300;
-}
-
-.entrar-txt {
-    font-size: 0.9rem;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.cart-icon {
-    height: 38px;
-    width: auto;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.cart-icon:hover {
-    transform: scale(1.1);
-}
-
-/* --- LINHA 2: Links e Navegação --- */
+/* --- LINHA 2: LINKS E BOTÕES (Subida para não grudar na borda) --- */
 .linha-baixo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  opacity: 1;
+  transition: all 0.4s ease-in-out;
+  /* Removemos alturas fixas para o flex gap funcionar melhor */
 }
 
-.grupo-esquerda {
+/* Área Esquerda Dinâmica (Onde ocorre a troca) */
+.area-esquerda-dinamica {
+    display: flex;
+    align-items: center;
+    min-width: 320px; 
+}
+
+/* Grupo 1: Padrão (Localização + Produtos) */
+.grupo-padrao {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.localizacao {
-    display: flex;
+/* Grupo 2: Ativo (Fechar + Ver Todos) */
+.grupo-ativo {
+    display: none; /* Escondido por padrão */
     align-items: center;
-    font-size: 0.8rem;
-    color: #ccc;
-    cursor: pointer;
-    white-space: nowrap;
+    gap: 20px;
+    animation: fadeIn 0.3s ease;
 }
 
-/* Estilo do Botão Produtos */
+.localizacao { display: flex; align-items: center; font-size: 0.8rem; color: #ccc; cursor: pointer; white-space: nowrap; }
+
+/* Botão Produtos */
 .btn-produtos {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    border: 1px solid #777; /* Borda cinza sutil */
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: border-color 0.3s;
-    color: #f0f0f0;
+  display: flex; align-items: center; gap: 5px;
+  border: 1px solid #777; border-radius: 4px;
+  padding: 5px 10px; cursor: pointer;
+  transition: border-color 0.3s; color: #f0f0f0;
 }
+.btn-produtos:hover { border-color: #D99E52; }
+.btn-produtos a { color: #F0F0F0; font-weight: 500; font-size: 0.9rem; }
+.btn-produtos .seta { color: #999; font-size: 0.7rem; }
 
-.btn-produtos:hover {
-    border-color: #D99E52; /* Borda dourada ao passar o mouse */
+/* Botão Fechar */
+.btn-fechar-menu {
+    color: #F0F0F0; background: transparent;
+    border: 1px solid #333; padding: 6px 15px;
+    border-radius: 4px; cursor: pointer; font-size: 0.9rem;
+    display: flex; align-items: center; gap: 8px;
 }
+.btn-fechar-menu:hover { border-color: #D99E52; color: #D99E52; }
 
-.btn-produtos a {
-    color: #F0F0F0;
-    font-weight: 500;
-    font-size: 0.9rem;
-    text-decoration: none;
-}
+/* Link Ver Todos */
+.link-ver-todos { color: #ccc; text-decoration: underline; font-size: 0.9rem; }
+.link-ver-todos:hover { color: #D99E52; }
 
-.btn-produtos .seta {
-    color: #999;
-    font-size: 0.7rem;
-}
+/* Links Direita */
+.links-nav { display: flex; gap: 25px; }
 
-/* Outros Links */
-.links-nav {
-    display: flex;
-    gap: 25px;
-}
 
-/* --- MOBILE --- */
-.menuMobile {
-  background: none;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: none; 
-}
+/* --- LÓGICA DE ALTERNÂNCIA (.menu-aberto) --- */
+.menu.menu-aberto .grupo-padrao { display: none; }
+.menu.menu-aberto .grupo-ativo { display: flex; }
+.menu.menu-aberto .mega-menu { display: flex; opacity: 1; transform: translateY(0); }
 
-.cont {
-  display: none; 
-  position: fixed;
-  top: 130px; 
-  left: 0;
-  width: 100%;
-  background-color: #181818;
-  z-index: 999;
-  border-bottom: 4px solid #D99E52;
-}
 
-/* --- ANIMAÇÃO DE ROLAGEM (SCROLL) SUAVE --- */
+/* --- MEGA MENU FLUTUANTE (CORRIGIDO: 60% Width) --- */
 
-/* 2. Configuração inicial da LINHA DE BAIXO (estado visível) */
-.linha-baixo {
-  /* Define altura máxima e opacidade iniciais para permitir animação */
-  max-height: 60px; /* Altura suficiente para caber o conteúdo */
-  opacity: 1;
-  overflow: hidden; /* Importante para o conteúdo não "vazar" enquanto encolhe */
-  transition: all 0.4s ease-in-out; /* A mágica acontece aqui */
-}
-
-/* --- ESTADO COMPACTO (QUANDO O JS ATIVA A CLASSE) --- */
-
-.menu.menu-compact {
-  height: 80px; /* Altura total do menu encolhido */
-  background-color: #181818;
-}
-
-/* 3. Como a LINHA DE BAIXO deve ficar quando compacta */
-.menu.menu-compact .linha-baixo {
-  max-height: 0; /* Encolhe a altura para 0 */
-  opacity: 0;    /* Fica transparente */
-  margin: 0;     /* Remove margens */
-  padding: 0;    /* Remove padding */
-  pointer-events: none; /* Garante que ninguém clique nos links invisíveis */
-}
-
-/* Quando o menu fica compacto */
-.menu.menu-compact .logo {
-  max-height: 55px; /* Tamanho reduzido */
-}
-
-/* Centraliza o conteúdo restante (busca/user) quando encolher */
-.menu.menu-compact .conteudo-header {
-  justify-content: center;
-}
-
-/* --- MEGA MENU ESTILIZADO --- */
-
-/* Container Principal do Menu (Escondido por padrão) */
 .mega-menu {
     position: fixed;
-    top: 130px; /* Deve ser a mesma altura do seu Header */
-    left: 0;
-    width: 100%;
-    background-color: #181818;
-    border-bottom: 4px solid #D99E52;
-    z-index: 900; /* Fica abaixo do header (1000) mas acima do site */
-    display: none; /* O JS vai mudar isso para block */
-    flex-direction: column;
-    padding: 20px 5%;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.8);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-/* Classe ativada pelo JS */
-.mega-menu.ativo {
-    display: flex;
-    opacity: 1;
-}
-
-/* Header do Mega Menu (Título e Fechar) */
-.mm-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    color: #D99E52;
-    font-weight: 600;
-}
-
-.mm-fechar {
-    color: #F0F0F0;
-    font-size: 0.9rem;
-    cursor: pointer;
-    background: transparent;
+    top: 130px; /* Logo abaixo do header */
+    
+    /* CENTRALIZADO COM 60% DE LARGURA */
+    left: 15%; /* (100% - 60%) / 2 = 20% de margem esquerda */
+    width: 66%;
+    
+    background-color: #181818; 
     border: 1px solid #333;
-    padding: 5px 15px;
-    border-radius: 4px;
-}
-.mm-fechar:hover {
-    border-color: #D99E52;
-    color: #D99E52;
-}
-
-/* --- ÁREA DAS MARCAS (BOLINHAS) --- */
-.mm-marcas {
-    display: flex;
-    gap: 30px;
-    justify-content: center; /* Centraliza as marcas */
-    flex-wrap: wrap;
-    padding-bottom: 10px;
-}
-
-.marca-item {
-    display: flex;
+    border-top: none; /* Grudado no header */
+    border-bottom: 4px solid #D99E52;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    
+    z-index: 900; 
+    
+    display: none;
     flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: all 0.3s ease;
+    padding: 30px 5%;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8); /* Sombra mais forte para destacar */
+    
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    max-height: 80vh; /* Limite de altura */
+    overflow-y: auto;
 }
 
-.marca-item:hover, 
-.marca-item.active {
-    opacity: 1;
-    transform: translateY(-5px);
+/* Estilos Internos do Mega Menu */
+.mm-marcas { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; padding-bottom: 20px; }
+.marca-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; opacity: 0.6; transition: all 0.3s ease; }
+.marca-item:hover, .marca-item.active { opacity: 1; transform: scale(1.05); }
+.marca-item img { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; margin-bottom: 10px; background-color: #fff; }
+.marca-item:hover img, .marca-item.active img { border-color: #D99E52; }
+.marca-item span { color: #F0F0F0; font-size: 0.9rem; }
+
+.mm-divisor { width: 100%; height: 1px; background-color: #333; margin: 20px 0; }
+
+.mm-conteudo-container { min-height: 200px; width: 100%; }
+.mm-conteudo { display: none; justify-content: center; gap: 100px; width: 100%; animation: fadeIn 0.4s ease; }
+.mm-conteudo.active { display: flex; }
+
+.coluna { display: flex; flex-direction: column; gap: 12px; }
+.coluna h3 { color: #D99E52; font-size: 1.2rem; margin-bottom: 15px; border-bottom: 2px solid #333; padding-bottom: 5px; width: 220px; }
+.coluna a { color: #ccc; font-size: 0.95rem; transition: 0.2s; }
+.coluna a:hover { color: #F0F0F0; padding-left: 5px; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+/* --- SCROLL E COMPORTAMENTO COMPACTO --- */
+
+/* Quando scrollar, header diminui para 80px */
+.menu.menu-compact { height: 80px; }
+.menu.menu-compact .logo { max-height: 55px; }
+/* Esconde a linha de baixo no scroll */
+.menu.menu-compact .linha-baixo {
+    max-height: 0; opacity: 0; margin: 0; padding: 0; pointer-events: none;
 }
 
-.marca-item img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%; /* Faz ficar redondo */
-    object-fit: cover;
-    border: 3px solid transparent;
-    margin-bottom: 8px;
-    background-color: #fff; /* Caso a imagem seja png transparente */
+/* SE O MENU ESTIVER ABERTO, não deixe compactar */
+.menu.menu-aberto.menu-compact { 
+    height: 130px; 
+}
+.menu.menu-aberto.menu-compact .linha-baixo {
+    max-height: 60px; opacity: 1; pointer-events: auto;
 }
 
-/* Borda dourada quando selecionado */
-.marca-item:hover img, 
-.marca-item.active img {
-    border-color: #D99E52;
-}
+/* Mega menu ajusta posição no scroll se necessário */
+.menu.menu-compact ~ .mega-menu, .menu.menu-compact .mega-menu { top: 80px; } 
 
-.marca-item span {
-    color: #F0F0F0;
-    font-size: 0.9rem;
-}
-
-.mm-divisor {
-    width: 100%;
-    height: 1px;
-    background-color: #333;
-    margin: 20px 0;
-}
-
-/* --- CONTEÚDO (COLUNAS) --- */
-.mm-conteudo-container {
-    min-height: 200px;
-}
-
-.mm-conteudo {
-    display: none; /* Esconde todos */
-    justify-content: center;
-    gap: 100px; /* Espaço entre coluna Masc e Fem */
-    animation: fadeIn 0.4s ease;
-}
-
-.mm-conteudo.active {
-    display: flex; /* Mostra só o ativo */
-}
-
-.coluna {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.coluna h3 {
-    color: #D99E52;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 5px;
-    width: 200px;
-}
-
-.coluna a {
-    color: #ccc;
-    font-size: 0.95rem;
-    transition: color 0.2s, padding-left 0.2s;
-}
-
-.coluna a:hover {
-    color: #F0F0F0;
-    padding-left: 5px; /* Efeitinho de mover para direita */
-}
-
-/* Animação suave ao trocar de aba */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Ajuste Mobile: Esconder Mega Menu no celular */
-@media (max-width: 768px) {
+/* Mobile */
+@media (max-width: 768px) { 
+    .menu { padding: 0 4%; }
+    .conteudo-header { display: none; }
+    .menuMobile { display: block; }
     .mega-menu { display: none !important; }
 }
-
-/* Ajuste Scroll: Se o menu encolher, o mega menu deve subir junto */
-.menu.menu-compact ~ .mega-menu, /* Se estiver fora */
-.menu.menu-compact .mega-menu {  /* Se estiver dentro */
-    top: 80px; /* Nova altura do header compacto */
-}
+.menuMobile { display: none; background: none; border: none; cursor: pointer; padding: 0; }
+.cont { display: none; position: fixed; top: 130px; left: 0; width: 100%; background: #181818; z-index: 999; border-bottom: 4px solid #D99E52; }
 
 
 /* --- Conteúdo Principal (INTACTO) --- */
