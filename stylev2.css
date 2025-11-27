@@ -1111,12 +1111,22 @@ a { color: #F0F0F0; text-decoration: none; }
     .linha-baixo {
         order: 2;
         background-color: #181818;
-        padding: 12px 15px;
-        height: auto;
-        min-height: 45px;
+        
+        /* REMOVIDO min-height para a animação funcionar */
+        /* min-height: 45px;  <-- TIRE ISSO SE TIVER */
+        
         display: flex;
         justify-content: center;
         border-top: 1px solid #333;
+        
+        /* --- CONFIGURAÇÃO DA ANIMAÇÃO --- */
+        max-height: 60px; /* Altura suficiente para o conteúdo caber */
+        opacity: 1;
+        padding: 12px 15px; /* Padding original visível */
+        overflow: hidden; /* OBRIGATÓRIO: impede o texto de vazar enquanto encolhe */
+        
+        /* Transição suave de todos os atributos */
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .area-esquerda-dinamica,
@@ -1140,9 +1150,21 @@ a { color: #F0F0F0; text-decoration: none; }
     .mega-menu { display: none !important; }
 
     /* --- COMPORTAMENTO DE SCROLL MOBILE --- */
-    .menu.menu-compact { height: auto; }
-    .menu.menu-compact .linha-baixo { display: none; }
-    .menu.menu-compact .linha-topo { display: block; }
+    .menu.menu-compact { 
+        height: auto; 
+    }
+    
+    .menu.menu-compact .linha-baixo {
+        max-height: 0; 
+        opacity: 0;
+        padding: 0 15px; /* Mantém lateral, zera vertical */
+        margin: 0;
+        border-top: 0 solid transparent; /* Remove a borda suavemente */
+    }
+    
+    .menu.menu-compact .linha-topo { 
+        display: block; 
+    }
 
     /* TRAVA A LOGO: Mesmo no compact, ela mantém o tamanho original */
     .menu.menu-compact .logo {
