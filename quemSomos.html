@@ -10,55 +10,243 @@
 </head>
 
 <body>
-
-  <header class="menu">
-    <img class="logo" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Elegance">
-
-    <div class="grupo1">
-      <button class="menuMobile" onclick="mostrarMenu()"><img src="Imagens/Menu.png" alt="Menu"></button>
-      <a class="topicos" href="home.html">Início</a>
-      <a class="topicos" href="produto.html">Produtos</a>
-      <a class="topicos" href="quemSomos.html">Quem somos</a>
-      <a class="topicos" href="pfrete.html">Politica de frete</a>
-    </div>
-
-    <div class="grupo2">
-      <div class="search-box">
-        <input class="button" type="text" name="pesquisa" placeholder="O que está buscando?">
-        <button class="lupa" onclick="botaolupa()">
-          <img id="lupa" src="Imagens/ICON LUPA.png" alt="Buscar">
-        </button>
-      </div>
-      
-      <div id="carrinho">
-        <img src="Imagens/ICON SACOLA DE COMPRA.png" class="nav-icon" id="vercarrinho" onclick="verMiniCarrinho()" alt="Carrinho">
-
-    <div id="miniCarrinhoContainer" style="display: none;">
-      <h3>Seu Mini Carrinho</h3>
-
-      <div id="miniCarrinhoItens">
-        <p>Seu carrinho está vazio.</p>
-      </div>
-    
-      <p>Total: R$ <span id="miniCarrinhoTotal">0.00</span></p>
-    
-      <a href="" class="clink" id="clink" onclick="comprarminicarrinho()">
-        <button class="btn-comprar">Comprar pelo WhatsApp</button>
+<header class="menu">
+  <div class="area-logo">
+      <a href="index.html">
+      <img class="logo" src="Imagens/ICON ELEGANCE PH.PNG" alt="Logo Elegance">
       </a>
-      <button class="btn-limpar" onclick="limparMiniCarrinho()">Limpar Carrinho</button>
-      <button class="btn-fechar" onclick="fecharMiniCarrinho()">Fechar</button>
     </div>
-  </div>
-  </header>
 
-  <div class="cont" id="cont">
-    <div class="Mobil">
-      <a class="Mob" href="home.html">Início</a><br><br>
-      <a class="Mob" href="produto.html">Produtos</a><br><br>
-      <a class="Mob" href="quemSomos.html">Quem somos</a><br><br>
-      <a class="Mob" href="pfrete.html">Politica de frete</a>
+  <div class="conteudo-header">
+    <div class="linha-topo">
+        <div class="search-box">
+          <input class="button" type="text" name="pesquisa" placeholder="O que está buscando?">
+          <button class="lupa" onclick="botaolupa()">
+            <img id="lupa" src="Imagens/ICON LUPA.png" alt="Buscar">
+          </button>
+        </div>
+
+        <div class="icones-topo">
+            <a href="login.html" class="nav-icon user-area">
+                <img src="Imagens/ICON PERFIL.png" alt="Usuário">
+                <div class="user-text">
+                    <span class="bem-vindo">Bem-vindo</span>
+                    <span class="entrar-txt">Entrar ou cadastrar</span>
+                </div>
+            </a>
+            <div id="carrinho">
+                <img src="Imagens/ICON SACOLA DE COMPRA.png" class="nav-icon cart-icon" onclick="verMiniCarrinho()" alt="Carrinho">
+                  <div id="miniCarrinhoContainer" style="display: none;">
+                <h3>Seu Mini Carrinho</h3>
+                  <div id="miniCarrinhoItens">
+                    <p>Seu carrinho está vazio.</p>
+                  </div>
+                  <p>Total: R$ <span id="miniCarrinhoTotal">0.00</span></p>
+            
+                  <a href="" class="clink" id="clink" onclick="comprarminicarrinho()">
+                    <button class="btn-comprar">Comprar pelo WhatsApp</button>
+                  </a>
+            
+                  <button class="btn-limpar" onclick="limparMiniCarrinho()">Limpar Carrinho</button>
+                  <button class="btn-fechar" onclick="fecharMiniCarrinho()">Fechar</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div class="linha-baixo">
+        
+        <div class="area-esquerda-dinamica">
+            
+            <div class="grupo-padrao">
+                <div class="localizacao">
+                    <img src="Imagens/ICON PIN.png" alt="Pin" style="height: 18px; margin-right: 5px;"> 
+                    <span>Enviar para: 00000-000</span>
+                </div>
+                <div class="btn-produtos" onclick="toggleMegaMenu()">
+                    <span>Produtos</span>
+                    <span class="seta">&#9660;</span>
+                </div>
+            </div>
+
+            <div class="grupo-ativo">
+                <button class="btn-fechar-menu" onclick="toggleMegaMenu()">
+                    ✕ Fechar
+                </button>
+                <a href="produto.html" class="link-ver-todos">
+                    Ver todos os produtos →
+                </a>
+            </div>
+
+        </div>
+
+        <nav class="links-nav">
+            <a class="topicos" href="quemSomos.html">Quem somos</a>
+            <a class="topicos" href="pfrete.html">Política de frete</a>
+        </nav>
+    </div>
+
+   <button class="menuMobile" onclick="toggleMenuMobile()">
+    <img src="Imagens/Menu.png" alt="Menu">
+  </button>
+
+  <div id="mobileOverlay" class="mobile-overlay" onclick="toggleMenuMobile()"></div>
+
+  <div id="mobileSidebar" class="mobile-sidebar">
+      
+      <div class="ms-header">
+          <a href="login.html" class="ms-link destaque" style="border-bottom: 0px;">
+              <img src="Imagens/ICON PERFIL.png" style="height: 20px;"> 
+              Entrar ou Cadastrar
+          </a>
+          <button class="ms-fechar" onclick="toggleMenuMobile()">✕</button>
+      </div>
+
+      <nav class="ms-nav">
+          
+
+          <a href="index.html" class="ms-link">Início</a>
+          
+          <div class="ms-accordion">
+              <div class="ms-accordion-btn" onclick="toggleSubMenuMobile()">
+                  Produtos <span id="setaMobile">&#9660;</span>
+              </div>
+              
+              <div id="msSubmenu" class="ms-submenu">
+                  <a href="produto.html" style="font-weight: bold; color: #D99E52;">Ver todos os produtos</a>
+                  <div class="ms-lista-marcas">
+                      
+                      <div class="ms-marca-wrapper">
+                          <button class="ms-marca-btn" onclick="toggleMarcaMobile('mobMarca1')">
+                              <span>Nike</span>
+                              <span class="ms-seta">›</span>
+                          </button>
+                          
+                          <div id="mobMarca1" class="ms-marca-content">
+                              <div class="ms-cat-grupo">
+                                  <h4 class="ms-cat-titulo">Masculino</h4>
+                                  <a href="#">Tênis de Corrida</a>
+                                  <a href="#">Camisetas Dry-Fit</a>
+                                  <a href="#">Bermudas</a>
+                              </div>
+                              <div class="ms-cat-grupo">
+                                  <h4 class="ms-cat-titulo">Feminino</h4>
+                                  <a href="#">Tops Esportivos</a>
+                                  <a href="#">Leggings</a>
+                                  <a href="#">Tênis Casual</a>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="ms-marca-wrapper">
+                          <button class="ms-marca-btn" onclick="toggleMarcaMobile('mobMarca2')">
+                              <span>Adidas</span>
+                              <span class="ms-seta">›</span>
+                          </button>
+                          
+                          <div id="mobMarca2" class="ms-marca-content">
+                              <div class="ms-cat-grupo">
+                                  <h4 class="ms-cat-titulo">Masculino</h4>
+                                  <a href="#">Ultraboost</a>
+                                  <a href="#">Camisas de Time</a>
+                              </div>
+                              <div class="ms-cat-grupo">
+                                  <h4 class="ms-cat-titulo">Feminino</h4>
+                                  <a href="#">Superstar</a>
+                                  <a href="#">Agasalhos</a>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="ms-marca-wrapper">
+                          <button class="ms-marca-btn" onclick="toggleMarcaMobile('mobMarca3')">
+                              <span>Puma</span>
+                              <span class="ms-seta">›</span>
+                          </button>
+                          <div id="mobMarca3" class="ms-marca-content">
+                              <p style="padding:10px; color:#999;">Conteúdo Puma...</p>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+
+          <a href="quemSomos.html" class="ms-link">Quem somos</a>
+          <a href="pfrete.html" class="ms-link">Política de frete</a>
+      </nav>
   </div>
+
+  <div id="megaMenu" class="mega-menu">
+
+
+      <div class="mm-marcas">
+          <div class="marca-item active" onmouseover="ativarMarca('marca1', this)">
+             <img src="https://placehold.co/60x60/333/D99E52?text=M1" alt="Marca 1">
+             <span>Nike</span>
+          </div>
+          <div class="marca-item" onmouseover="ativarMarca('marca2', this)">
+             <img src="https://placehold.co/60x60/333/D99E52?text=M2" alt="Marca 2">
+             <span>Adidas</span>
+          </div>
+          <div class="marca-item" onmouseover="ativarMarca('marca3', this)">
+             <img src="https://placehold.co/60x60/333/D99E52?text=M3" alt="Marca 3">
+             <span>Puma</span>
+          </div>
+          <div class="marca-item" onmouseover="ativarMarca('marca4', this)">
+             <img src="https://placehold.co/60x60/333/D99E52?text=M4" alt="Marca 4">
+             <span>Mizuno</span>
+          </div>
+          <div class="marca-item" onmouseover="ativarMarca('marca5', this)">
+             <img src="https://placehold.co/60x60/333/D99E52?text=M5" alt="Marca 5">
+             <span>Oakley</span>
+          </div>
+      </div>
+
+      <div class="mm-divisor"></div>
+
+      <div class="mm-conteudo-container">
+          
+          <div id="marca1" class="mm-conteudo active">
+              <div class="coluna">
+                  <h3>Nike Masculino</h3>
+                  <a href="#">Tênis de Corrida</a>
+                  <a href="#">Camisetas Dry-Fit</a>
+                  <a href="#">Bermudas</a>
+                  <a href="#">Chuteiras</a>
+              </div>
+              <div class="coluna">
+                  <h3>Nike Feminino</h3>
+                  <a href="#">Tops Esportivos</a>
+                  <a href="#">Leggings</a>
+                  <a href="#">Tênis Casual</a>
+                  <a href="#">Acessórios</a>
+              </div>
+          </div>
+
+          <div id="marca2" class="mm-conteudo">
+              <div class="coluna">
+                  <h3>Adidas Masculino</h3>
+                  <a href="#">Tênis Ultraboost</a>
+                  <a href="#">Agasalhos</a>
+                  <a href="#">Camisas de Time</a>
+              </div>
+              <div class="coluna">
+                  <h3>Adidas Feminino</h3>
+                  <a href="#">Tênis Superstar</a>
+                  <a href="#">Vestidos Sport</a>
+                  <a href="#">Mochilas</a>
+              </div>
+          </div>
+          
+          <div id="marca3" class="mm-conteudo"><p style="padding:20px; color:#ccc;">Conteúdo Puma...</p></div>
+          <div id="marca4" class="mm-conteudo"><p style="padding:20px; color:#ccc;">Conteúdo Mizuno...</p></div>
+          <div id="marca5" class="mm-conteudo"><p style="padding:20px; color:#ccc;">Conteúdo Oakley...</p></div>
+
+      </div>
+  </div>
+
+</header>
 
   <div class="oi">
     <h2 class="titulo1">Quem Somos - Elegance PH</h2>

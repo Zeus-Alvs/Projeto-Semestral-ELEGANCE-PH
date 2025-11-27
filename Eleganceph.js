@@ -23,14 +23,19 @@
   }
 
   window.addEventListener("scroll", function() {
-    let header = document.querySelector('.menu');
-    // Se rolar mais de 50px, adiciona a classe 'menu-compact'
-    if (window.scrollY > 50) { 
-      header.classList.add('menu-compact');
-    } else {
-      header.classList.remove('menu-compact');
-    }
-  });
+        let header = document.querySelector('.menu');
+        
+        if (window.scrollY > 50) { 
+            header.classList.add('menu-compact');
+            
+            // NOVO: Se rolar para baixo, fecha o Mega Menu automaticamente
+            if (header.classList.contains('menu-aberto')) {
+                header.classList.remove('menu-aberto');
+            }
+        } else {
+            header.classList.remove('menu-compact');
+        }
+    });
     // --- LÓGICA DO MEGA MENU ---
 
     // 1. Abrir/Fechar o Menu Geral
@@ -56,6 +61,48 @@
     
     // --- (MANTENHA SEU CÓDIGO DE SCROLL AQUI EMBAIXO) ---
     // ...
+
+    function toggleMenuMobile() {
+        const sidebar = document.getElementById('mobileSidebar');
+        const overlay = document.getElementById('mobileOverlay');
+        
+        // Adiciona/Remove a classe 'aberto' para animar
+        sidebar.classList.toggle('aberto');
+        overlay.classList.toggle('aberto');
+        
+        // Impede que a página role no fundo quando o menu está aberto
+        if (sidebar.classList.contains('aberto')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Função Sanfona (Accordion) para Produtos no Mobile
+    function toggleSubMenuMobile() {
+        const submenu = document.getElementById('msSubmenu');
+        const seta = document.getElementById('setaMobile');
+        
+        submenu.classList.toggle('ativo');
+        
+        // Gira a setinha
+        if (submenu.classList.contains('ativo')) {
+            seta.style.transform = "rotate(180deg)";
+        } else {
+            seta.style.transform = "rotate(0deg)";
+        }
+    }
+
+    // Função para abrir/fechar as MARCAS dentro do menu mobile
+    function toggleMarcaMobile(id) {
+        const conteudo = document.getElementById(id);
+        const botao = event.currentTarget; // O botão que foi clicado
+        
+        // Alterna a classe 'aberto' no conteúdo
+        conteudo.classList.toggle('aberto');
+        // Alterna a classe 'ativo' no botão (para girar a seta)
+        botao.classList.toggle('ativo');
+    }
 
   linkbase = "";
   function abririmagem(src, descricao, href, preco){

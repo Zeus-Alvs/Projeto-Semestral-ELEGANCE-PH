@@ -117,7 +117,7 @@ a { color: #F0F0F0; text-decoration: none; }
 .cart-icon:hover { transform: scale(1.1); }
 
 
-/* --- LINHA 2: LINKS E BOTÕES (Subida para não grudar na borda) --- */
+/* --- LINHA 2: LINKS E BOTÕES --- */
 .linha-baixo {
   display: flex;
   align-items: center;
@@ -125,7 +125,6 @@ a { color: #F0F0F0; text-decoration: none; }
   width: 100%;
   opacity: 1;
   transition: all 0.4s ease-in-out;
-  /* Removemos alturas fixas para o flex gap funcionar melhor */
 }
 
 /* Área Esquerda Dinâmica (Onde ocorre a troca) */
@@ -183,38 +182,57 @@ a { color: #F0F0F0; text-decoration: none; }
 /* --- LÓGICA DE ALTERNÂNCIA (.menu-aberto) --- */
 .menu.menu-aberto .grupo-padrao { display: none; }
 .menu.menu-aberto .grupo-ativo { display: flex; }
-.menu.menu-aberto .mega-menu { display: flex; opacity: 1; transform: translateY(0); }
+.menu.menu-aberto .mega-menu {
+    /* Mostra visualmente */
+    opacity: 1;
+    visibility: visible;
+    
+    /* Reativa os cliques */
+    pointer-events: auto;
+    
+    /* Traz para a posição original e tamanho real */
+    transform: translateY(0) scale(1);
+}
 
 
 /* --- MEGA MENU FLUTUANTE (CORRIGIDO: 60% Width) --- */
 
 .mega-menu {
     position: fixed;
-    top: 130px; /* Logo abaixo do header */
-    
-    /* CENTRALIZADO COM 60% DE LARGURA */
-    left: 15%; /* (100% - 60%) / 2 = 20% de margem esquerda */
+    top: 130px; 
+    left: 15%; 
     width: 66%;
     
     background-color: #181818; 
     border: 1px solid #333;
-    border-top: none; /* Grudado no header */
+    border-top: none;
     border-bottom: 4px solid #D99E52;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 12px; 
+    border-bottom-right-radius: 12px;
     
     z-index: 900; 
     
-    display: none;
+    display: flex; /* Mantemos flex, mas escondemos visualmente */
     flex-direction: column;
     padding: 30px 5%;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8); /* Sombra mais forte para destacar */
     
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    max-height: 80vh; /* Limite de altura */
+    /* Sombra mais difusa */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
+    
+    max-height: 80vh;
     overflow-y: auto;
+
+    /* --- ESTADO INICIAL (FECHADO) --- */
+    opacity: 0;
+    visibility: hidden; 
+    pointer-events: none; 
+    transform: translateY(-20px) scale(0.98);
+    
+    /* Transição suave */
+    transition: 
+        opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.4s;
 }
 
 /* Estilos Internos do Mega Menu */
@@ -249,26 +267,219 @@ a { color: #F0F0F0; text-decoration: none; }
     max-height: 0; opacity: 0; margin: 0; padding: 0; pointer-events: none;
 }
 
-/* SE O MENU ESTIVER ABERTO, não deixe compactar */
-.menu.menu-aberto.menu-compact { 
-    height: 130px; 
-}
-.menu.menu-aberto.menu-compact .linha-baixo {
-    max-height: 60px; opacity: 1; pointer-events: auto;
-}
-
 /* Mega menu ajusta posição no scroll se necessário */
 .menu.menu-compact ~ .mega-menu, .menu.menu-compact .mega-menu { top: 80px; } 
 
-/* Mobile */
-@media (max-width: 768px) { 
-    .menu { padding: 0 4%; }
-    .conteudo-header { display: none; }
-    .menuMobile { display: block; }
-    .mega-menu { display: none !important; }
-}
 .menuMobile { display: none; background: none; border: none; cursor: pointer; padding: 0; }
 .cont { display: none; position: fixed; top: 130px; left: 0; width: 100%; background: #181818; z-index: 999; border-bottom: 4px solid #D99E52; }
+
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Escurece o fundo */
+    z-index: 2000; /* Acima de tudo */
+    display: none; /* Escondido por padrão */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-overlay.aberto {
+    display: block;
+    opacity: 1;
+}
+
+/* A Barra Lateral */
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: -75%; /* Começa escondido na esquerda */
+    width: 75%; /* Ocupa 75% da tela (ajustado para mobile) */
+    max-width: 350px; /* Limite para não ficar gigante em tablets */
+    height: 100vh; /* Altura total */
+    
+    background-color: #181818;
+    border-right: 4px solid #D99E52;
+    z-index: 2001; /* Acima do overlay */
+    
+    display: flex;
+    flex-direction: column;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+.mobile-sidebar.aberto {
+    left: 0; /* Desliza para a tela */
+}
+
+/* Cabeçalho Interno */
+.ms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #101010;
+    border-bottom: 1px solid #333;
+}
+
+.ms-titulo {
+    color: #D99E52;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.ms-fechar {
+    background: none;
+    border: none;
+    color: #F0F0F0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Navegação */
+.ms-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.ms-link {
+    color: #F0F0F0;
+    font-size: 1rem;
+    padding: 15px 0;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ms-link.destaque {
+    color: #D99E52;
+    font-weight: 600;
+}
+
+/* Accordion de Produtos */
+.ms-accordion-btn {
+    color: #F0F0F0;
+    font-size: 1rem;
+    padding: 15px 0;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.ms-submenu {
+    background-color: #101010;
+    max-height: 0; /* Escondido */
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+.ms-submenu.ativo {
+    max-height: 500px; /* Abre espaço suficiente */
+    padding: 15px 10px;
+    margin-top: 10px;
+}
+
+/* --- ESTILOS DAS MARCAS NO MOBILE (SANFONA ANINHADA) --- */
+
+.ms-lista-marcas {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.ms-marca-wrapper {
+    border-bottom: 1px solid #222;
+}
+
+/* Botão da Marca (Ex: Nike) */
+.ms-marca-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #ccc;
+    padding: 15px 10px;
+    text-align: left;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.ms-marca-btn:hover {
+    color: #D99E52;
+}
+
+.ms-seta {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+/* Quando a marca está aberta, gira a seta e muda a cor */
+.ms-marca-btn.ativo {
+    color: #D99E52;
+}
+.ms-marca-btn.ativo .ms-seta {
+    transform: rotate(90deg); /* Seta aponta pra baixo */
+}
+
+/* Área de Conteúdo da Marca (Masc/Fem) */
+.ms-marca-content {
+    background-color: #0a0a0a; /* Fundo mais escuro para destacar */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding: 0 15px; /* Recuo interno */
+}
+
+.ms-marca-content.aberto {
+    max-height: 1000px; /* Altura suficiente para mostrar tudo */
+    padding-bottom: 15px;
+    border-left: 2px solid #D99E52; /* Linha lateral dourada */
+}
+
+/* Sub-categorias (Masc/Fem) */
+.ms-cat-grupo {
+    margin-top: 15px;
+}
+
+.ms-cat-titulo {
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.ms-cat-grupo a {
+    display: block;
+    color: #888;
+    font-size: 0.85rem;
+    padding: 5px 0;
+    text-decoration: none;
+}
+
+.ms-cat-grupo a:hover {
+    color: #D99E52;
+    padding-left: 5px;
+}
+
+.ms-divisor {
+    height: 1px;
+    background-color: #333;
+    margin: 10px 0;
+}
 
 
 /* --- Conteúdo Principal (INTACTO) --- */
@@ -794,30 +1005,150 @@ a { color: #F0F0F0; text-decoration: none; }
     padding-top: 80px; 
   }
 
-  .menu {
-    height: 100px; 
-    border-bottom-width: 4px;
-    padding: 0 4%;
-  }
+/* 1. CONTAINER DO MENU */
+    .menu {
+        height: auto; 
+        min-height: 60px;
+        flex-direction: column;
+        padding: 0;
+        gap: 0;
+        align-items: stretch;
+    }
 
-  /* Oculta os elementos desktop no mobile */
-  .centro-header, 
-  .direita-header {
-      display: none;
-  }
+    /* 2. ÁREA DO TOPO (FAIXA PRETA) */
+    .area-logo {
+        width: 100%;
+        height: 60px;
+        background-color: #181818;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        order: 1;
+        position: relative;
+        z-index: 5;
+    }
 
-  /* Reativa o menu mobile */
-  .menuMobile {
-    display: block; 
-  }
+    /* LOGO: Tamanho fixo e sem transição de tamanho no mobile */
+    .logo {
+        max-height: 50px; 
+        transition: none; /* Remove a animação de encolher */
+    }
 
-  .menuMobile img {
-    height: 40px; 
-  }
+    /* Botão Hambúrguer (Canto Esquerdo) */
+    .menuMobile {
+        display: block;
+        position: absolute;
+        top: 16px; /* Ajuste fino de alinhamento */
+        left: 20px;
+        z-index: 20;
+    }
+    /* Aumentado para igualar aos outros */
 
-  .cont {
-    top: 100px; 
-  }
+    /* 3. ÍCONES (USUÁRIO E CARRINHO) */
+    .icones-topo {
+        position: absolute;
+        top: 16px;     
+        right: 15px;   
+        z-index: 20;   
+        
+        /* Aumentei o espaçamento entre eles conforme pedido */
+        gap: 20px; 
+    }
+    
+    .user-text { display: none; }
+    
+    /* Padronizando o tamanho para ficarem iguais */
+    .cart-icon { height: 28px; }
+
+    /* 4. CONTEÚDO HEADER */
+    .conteudo-header {
+        order: 2;
+        width: 100%;
+        padding: 0;
+        gap: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 5. BARRA DE PESQUISA (FAIXA CINZA) */
+    .linha-topo {
+        order: 1;
+        height: auto;
+        background-color: #E0E0E0; 
+        position: static; 
+        display: block; 
+    }
+
+    .search-box {
+        width: 100%;
+        background-color: #fff;
+        border-radius: 4px;
+        height: 40px;
+        border: none;
+        margin: 0;
+    }
+    
+    .search-box .button {
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        color: #333;
+        width: 100%;
+    }
+    
+    .search-box .lupa {
+        opacity: 0.7;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        display: block;
+    }
+    .search-box .lupa img { height: 20px; width: 20px; }
+
+    /* 6. BARRA DE LOCALIZAÇÃO (LINHA DE BAIXO) */
+    .linha-baixo {
+        order: 2;
+        background-color: #181818;
+        padding: 12px 15px;
+        height: auto;
+        min-height: 45px;
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid #333;
+    }
+
+    .area-esquerda-dinamica,
+    .grupo-padrao {
+        width: 100%;
+        justify-content: center;
+        min-width: 0;
+    }
+    
+    .localizacao { 
+        font-size: 0.8rem; 
+        color: #fff; 
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+    
+    /* Esconde elementos desktop */
+    .btn-produtos { display: none; }
+    .links-nav { display: none; }
+    .mega-menu { display: none !important; }
+
+    /* --- COMPORTAMENTO DE SCROLL MOBILE --- */
+    .menu.menu-compact { height: auto; }
+    .menu.menu-compact .linha-baixo { display: none; }
+    .menu.menu-compact .linha-topo { display: block; }
+
+    /* TRAVA A LOGO: Mesmo no compact, ela mantém o tamanho original */
+    .menu.menu-compact .logo {
+        max-height: 50px !important;
+    }
+
 
   .logos {
     gap: 3%;
