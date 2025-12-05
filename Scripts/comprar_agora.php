@@ -3,11 +3,11 @@ require 'config.php';
 session_start();
 
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+    header("Location: ../Templates/login.php");
     exit;
 }
 
-// Verifica se o ID do produto foi passado via GET
+
 $id_produto = isset($_POST['id_produto']) ? intval($_POST['id_produto']) : (isset($_POST['id']) ? intval($_POST['id']) : null);
 
 if (!$id_produto) {
@@ -33,13 +33,13 @@ $update = $pdo->prepare("UPDATE produto SET vendidos = ? WHERE id = ?");
 $update->execute([($qtde + $quantidade), $id_produto]);
 
 
-// Gerar código de pedido aleatório (6 dígitos)
+
 $codigo_pedido = rand(100000, 999999);
 
-// Nome do cliente
+
 $nome_cliente = $_SESSION['usuario_nome'];
 
-// Criar a mensagem para WhatsApp
+
 $mensagem = "Código de pedido: {$codigo_pedido}\n";
 $mensagem .= "Nome: {$nome_cliente}\n\n";
 $mensagem .= "Produto: {$produto['nome']}\n";
@@ -51,7 +51,7 @@ if (!empty($produto['descricao'])) {
 }
 $mensagem .= "----------------------------\n";
 
-// Codificar a mensagem para URL
+
 $mensagem_url = urlencode($mensagem);
 
 
@@ -59,7 +59,7 @@ $mensagem_url = urlencode($mensagem);
 
 
 
-// Redirecionar para WhatsApp
+
 header("Location: https://wa.me/5513988200915?text={$mensagem_url}");
 exit;
 ?>

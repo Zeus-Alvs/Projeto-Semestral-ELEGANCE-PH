@@ -3,13 +3,13 @@ require 'config.php';
 session_start();
 
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: dashboard.php");
+    header("Location: ../Templates/dashboard.php");
     exit;
 }
 
 $id_usuario = $_SESSION['usuario_id'];
 
-// Primeiro, remover todos os itens marcados com "remover todo"
+
 if (isset($_POST['remover_todo'])) {
     foreach ($_POST['remover_todo'] as $id_item => $valor) {
         if ($valor == 1) {
@@ -19,16 +19,16 @@ if (isset($_POST['remover_todo'])) {
     }
 }
 
-// Depois, remover a quantidade dos itens selecionados
+
 if (isset($_POST['selecionados'])) {
     foreach ($_POST['selecionados'] as $id_item => $valor) {
 
-        // Se já foi removido pelo "remover todo", pula
+  
         if (isset($_POST['remover_todo'][$id_item]) && $_POST['remover_todo'][$id_item] == 1) {
             continue;
         }
 
-        // Quantidade para remover
+    
         $remover_qtd = intval($_POST['quantidade'][$id_item]);
 
         $query = $pdo->prepare("SELECT quantidade FROM carrinho WHERE id = ? AND usuario_id = ?");
@@ -49,6 +49,6 @@ if (isset($_POST['selecionados'])) {
     }
 }
 
-header("Location: dashboard.php");
+header("Location: ../Templates/dashboard.php");
 exit;
 ?>

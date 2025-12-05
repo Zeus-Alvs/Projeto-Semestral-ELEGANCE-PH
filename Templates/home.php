@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../Scripts/config.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuario_id'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="Imagens/icone-topo.png" sizes="32x32">
-  <link rel="stylesheet" href="stylev2.css">
+  <link rel="stylesheet" href="../Estilos/stylev2.css">
   <title>Elegance PH</title>
 </head>
 
@@ -488,7 +488,7 @@ if (isset($_SESSION['usuario_id']) && $_SESSION['nivel'] === 'admin') {
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 

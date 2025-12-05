@@ -12,13 +12,13 @@ if (!isset($_SESSION['usuario_id'])) {
 
 
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+    header("Location: ../Templates/login.php");
     exit;
 }
 
 $id_usuario = $_SESSION['usuario_id'];
 
-// Dados recebidos do form
+
 $id_produto = $_POST['id_produto'];
 $nome = $pdo->prepare('SELECT nome FROM produto WHERE id = ?');
 $nome->execute([$id_produto]);
@@ -31,22 +31,22 @@ $precoitem = $preco->fetchColumn();
 $tamanho = $_POST['tamanho'];
 $quantidade = $_POST['quantidade'];
 
-// Verifica se já existe item igual no carrinho
+
 $query = $pdo->prepare("SELECT * FROM carrinho WHERE usuario_id = ? AND produto_id = ? AND tamanho = ?");
 $query->execute([$id_usuario, $id_produto, $tamanho]);
 $item = $query->fetch(PDO::FETCH_ASSOC);
 
 if ($item) {
-    // Atualiza quantidade se já existir
+    
     $novaQtd = $item['quantidade'] + $quantidade;
     $update = $pdo->prepare("UPDATE carrinho SET quantidade = ? WHERE id = ?");
     $update->execute([$novaQtd, $item['id']]);
 } else {
-    // Insere novo item
+    
     $insert = $pdo->prepare("INSERT INTO carrinho (usuario_id, produto_id, nomeproduto, preco, tamanho, quantidade) VALUES (?,?,?,?,?,?)");
     $insert->execute([$id_usuario, $id_produto, $nomeitem, $precoitem, $tamanho,$quantidade]);
 }
 
-header("Location: dashboard.php");
+header("Location: ../Templates/dashboard.php");
 exit;
 ?>

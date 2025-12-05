@@ -1,21 +1,41 @@
-<?php
-session_start();
+<?php 
+require '../Scripts/config.php';
+session_start();  
 if(!isset($_SESSION['usuario_id'])){
-    $cep = '00000-000';
-} else {
-    $cep = $_SESSION["usuario_cep"];
+  $cep = '00000-000';
+}else {
+  $cep = $_SESSION["usuario_cep"];
 }
 ?>
+
+
+<?php
+$query = $pdo->query('SELECT id, nome, foto, marca, preco, genero, tipo FROM produto');
+$produtos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$termo = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : "";
+
+$stmt = $pdo->prepare("SELECT * FROM produto WHERE nome LIKE ?");
+$stmt->execute(["%$termo%"]);
+$resultados = $stmt->fetchAll();
+?>
+
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="Imagens/icone-topo.png">
-  <link rel="stylesheet" href="stylev2.css">
-  <title>Elegance PH</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar</title>
+    <link rel="icon" href="Imagens/icone-topo.png">
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
 </head>
 <body>
+
 <!-- HEADER MENU INICIO AAAAA-->
 
   <header class="menu">
@@ -361,60 +381,133 @@ if(!isset($_SESSION['usuario_id'])){
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
-<script src="Eleganceph.js"></script>
-</body>
-</html>
+<h2>Resultados para: <?= htmlspecialchars($termo) ?></h2>
 
+<!-- ▬▬▬▬▬▬▬ BOTÃO DE FILTRO ▬▬▬▬▬▬▬ -->
 
-  <div class="oi">
-    <h2 class="titulo1">Quem Somos - Elegance PH</h2>
-    <div class="divOi">
-      <p class="texto1">Seja bem-vindo à Elegance PH! Somos uma loja movida por estilo, identidade e atitude.
-        Fundada por Pietro Henrique, nossa missão é oferecer o melhor da moda urbana — tênis, roupas e
-        acessórios — para quem carrega orgulho de suas raízes e quer expressar sua essência com autenticidade.
-      </p>
+<div class="ordenar">
+    <label>Ordenar por:</label>
+    <select id="ordenaPor">
+        <option value="evendidos" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'evendidos') ? 'selected' : ''; ?>>Mais vendidos</option>
+        <option value="avendidos" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'avendidos') ? 'selected' : ''; ?>>Menos vendidos</option>
+        <option value="epreco" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'epreco') ? 'selected' : ''; ?>>Menor preço</option>
+        <option value="apreco" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'apreco') ? 'selected' : ''; ?>>Maior preço</option>
+    </select>
+</div>
+<div class="container">
+<?php
+    $filtroOrdem = $_GET['ordem'] ?? 'evendidos';
+    $sqlOrderBy = "";
+
+switch ($filtroOrdem) {
+    case 'epreco':
+        $sqlOrderBy = "ORDER BY preco ASC"; 
+        break;
+    case 'apreco':
+        $sqlOrderBy = "ORDER BY preco DESC"; 
+        break;
+    case 'avendidos':
+        $sqlOrderBy = "ORDER BY vendidos ASC"; 
+        break;
+    case 'evendidos':
+    default:
+        $sqlOrderBy = "ORDER BY vendidos DESC"; 
+        break;
+}
+    $sql = "SELECT id, nome, foto, marca, preco, genero, tipo FROM produto " . $sqlOrderBy;
+    $query = $pdo->query($sql);
+    $produtos = $query->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!-- ▬▬▬▬▬▬▬ CONTAINER DOS FILTROS ▬▬▬▬▬▬▬ -->
+    <div id="filtrosContainer">
+        <div class="barra">
+        <div class="Ord">
+                <h2 class="txtOrd">Filtros</h2>
+
+                <label for="filtroMarca">Marca:</label>
+                <select id="filtroMarca">
+                    <option value="">Todas as marcas</option>
+                    <option value="NIKE">Nike</option>
+                    <option value="HUGOBOSS">Hugo Boss</option>
+                    <option value="MIZUNO">Mizuno</option>
+                    <option value="PUMA">Puma</option>
+                    <option value="ADIDAS">Adidas</option>
+                </select>
+
+                <label for="filtroPreco">Preço:</label>
+                <select id="filtroPreco">
+                    <option value="">Todos os preços</option>
+                    <option value="0-100">Até R$100</option>
+                    <option value="100-200">R$100 a R$200</option>
+                    <option value="200-300">R$200 a R$300</option>
+                    <option value="300-10000">Acima de R$300</option>
+                </select>
+
+                <label for="filtroGenero">Gênero:</label>
+                <select id="filtroGenero">
+                    <option value="">Todos os gêneros</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Unissex">Unissex</option>
+                </select>
+
+                <label for="filtroTipo">Tipo:</label>
+                <select id="filtroTipo">
+                    <option value="">Todos os tipos</option>
+                    <option value="Camiseta">Camiseta</option>
+                    <option value="Tenis">Tênis</option>
+                    <option value="Bermuda">Bermuda</option>
+                </select>
+            </div>
+        </div>
     </div>
 
-    <h2 class="titulo2">A Nossa História</h2>
-    <div class="divOi">
-      <p class="texto2">Tudo começou com a ideia de unir duas paixões da vida de Pietro: a moda e o corre de todo dia.
-        Com o tempo, ele percebeu que vestir-se bem vai além da estética — é uma forma de representar a
-        cultura, contar histórias e afirmar quem você é. Assim nasceu a Elegance PH: uma marca com
-        propósito, que leva as tendências mais originais e verdadeiras pra você vestir sua identidade com
-        confiança.
-      </p>
+
+<div class='produtos'>
+
+<?php if (count($resultados) > 0): ?>
+<?php
+foreach ($resultados as $item){
+    // DIV com os atributos usados pelo JavaScript
+    echo "
+    <div class='produto'
+        data-marca='{$item['marca']}'
+        data-preco='{$item['preco']}'
+        data-genero='{$item['genero']}'
+        data-tipo='{$item['tipo']}'
+    >";
+    
+    if ($_SESSION['nivel'] === 'admin') {
+        echo "
+        <a href='EditarProdutos.php?id={$item['id']}'>
+            <img src='{$item['foto']}' alt='{$item['nome']}'>
+            <div class='info-slide'>
+                <p class='nome'>".$item["nome"]."</p>
+                <p class='preco'>R$ ".number_format($item["preco"], 2, ",", ".")."</p>
+            </div>
+        </a>";
+    } else {
+        echo "
+        <a href='produtos.php?id={$item['id']}'>
+            <img src='{$item['foto']}' alt='{$item['nome']}'>
+            <div class='info-slide'>
+                <p class='nome'>".$item["nome"]."</p>
+                <p class='preco'>R$ ".number_format($item["preco"], 2, ",", ".")."</p>
+            </div>
+        </a>";
+    }
+
+    echo "</div>";
+}
+?>
     </div>
+<?php else: ?>
+    <p>Nenhum item encontrado.</p>
+<?php endif; ?>
+</div>
 
-    <h2 class="titulo3">A Nossa Missão</h2>
-    <div class="divOi">
-      <p class="texto3">
-        Nossa missão é destacar e valorizar a essência única de cada pessoa, proporcionando uma experiência de
-        compra marcante e oferecendo produtos de qualidade que traduzem o verdadeiro espírito das ruas, das
-        comunidades
-        e das histórias reais.</p>
-    </div>
-
-    <h2 class="titulo4">O Que Oferecemos</h2>
-    <div class="divOi">
-      <p class="texto4">Na Elegance PH, você
-        encontra uma curadoria especial de tênis, roupas, bonés e acessórios com influência da moda urbana e das
-        tendências atuais.
-        Trabalhamos com marcas reconhecidas e também damos espaço para talentos locais, criando coleções exclusivas
-        com significado, atitude e representatividade.</p>
-    </div>
-
-    <h2 class="titulo5">Gratidão</h2>
-    <div class="divOi">
-      <p class="texto5">Somos gratos a todos que fazem parte dessa caminhada — clientes, parceiros e colaboradores.
-        Cada conquista é resultado da confiança e do apoio que recebemos. Seguimos juntos, com muito estilo e
-        propósito,
-        fazendo nosso corre valer a pena.
-
-        Pietro Henrique e equipe Elegance PH</p>
-    </div>
-  </div>
-
-  <!-- rodape --> 
+<!-- rodape --> 
 <a class="WhtsAppFixo" href="https://wa.me/5513991462611" target="_blank" title="Fale conosco no WhatsApp">
   <img src="Imagens/zap.png" alt="WhatsApp">
 </a>
@@ -479,6 +572,9 @@ if(!isset($_SESSION['usuario_id'])){
   </div>
 </footer>
 
-  <script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
+
 </body>
+
 </html>
+

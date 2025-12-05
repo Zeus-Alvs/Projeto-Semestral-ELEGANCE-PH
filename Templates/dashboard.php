@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../Scripts/config.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
@@ -10,25 +10,33 @@ if (!isset($_SESSION['usuario_id'])) {
 
 <?php
 
-// Proteção admin
-if (!isset($_SESSION['usuario_id']) || $_SESSION['nivel'] !== 'admin') {
-    header("Location: home.php");
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: login.php");
     exit;
 }
 
-$produtos = $pdo->query("SELECT * FROM produto ORDER BY id DESC");
+$id = $_SESSION['usuario_id'];
+
+// CARRINHO
+$query = $pdo->prepare("SELECT * FROM carrinho WHERE usuario_id = ?");
+$query->execute([$id]);
+$carrinho = $query->fetchAll(PDO::FETCH_ASSOC);
+
+// PEGAR DADOS DO USUÁRIO
+$R = $pdo->prepare("SELECT * FROM usuario WHERE id = ? ");
+$R->execute([$id]);
+$usuario = $R->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Elegance PH</title>
     <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
 </head>
 <body>
-
 <!-- HEADER MENU INICIO AAAAA-->
 
   <header class="menu">
@@ -375,42 +383,92 @@ $produtos = $pdo->query("SELECT * FROM produto ORDER BY id DESC");
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
 
-<div class="pagina-gerenciar"> <div class="admin-header">
-        <h1>Gerenciar Produtos</h1>
-        <a href="AdicionarProd.php" class="btn-adicionar">
-            <span>➕</span> Adicionar Novo
-        </a>
+<div class="pagina-perfil"> <h2>Informações Pessoais</h2>
+    
+    <img class="perfil-img" style="width:80px; border-radius: 50%; border: 5px solid black" src="<?php echo $_SESSION['usuario_foto']; ?>">
+    
+    <a href="alterarfoto.php"><input class="btn-acao" type="submit" value="alterar foto"></a>
+
+    <div class="perfil-dados">
+        <p><strong>Nome:</strong> <?php echo $_SESSION['usuario_nome']; ?></p>
+        <p><strong>Email:</strong> <?php echo $_SESSION['usuario_email']; ?></p>
+        <p><strong>CPF:</strong> <?php echo $usuario['CPF']; ?></p>
+        <p><strong>CEP:</strong> <?php echo $usuario['CEP']; ?></p>
+        <p><strong>Rua:</strong> <?php echo $usuario['rua']; ?></p>
+        <p><strong>Numero:</strong> <?php echo $usuario['numero']; ?></p>
+        <p><strong>Complemento:</strong> <?php echo $usuario['complemento']; ?></p>
     </div>
 
-    <div class="grid-produtos">
-        
-        <?php while ($p = $produtos->fetch()): ?>
+    <a href="alterarinfos.php"><input class="btn-acao btn-grande" type="submit" value="Alterar Informações"></a>
+
+    <hr class="perfil-divisor">
+
+    <?php
+    if ($_SESSION['nivel'] !== 'admin') {
+
+        echo "<h3>Carrinho</h3>";
+
+        if (count($carrinho) == 0) {
+            echo "<p>Seu carrinho está vazio.</p>";
+            echo "<div class='botoes-nav'>";
+            echo "<a href='../Scripts/logout.php'><button class='btn-nav'>Deslogar</button></a> ";
+            echo "<a href='home.php'><button class='btn-nav'>Voltar</button></a>";
+            echo "</div>";
+        } else {
+            // Adicionei a classe 'carrinho-grid' no form
+            echo "<form method='POST' class='carrinho-grid'>";
             
-            <div class="card-admin">
-                <div class="img-wrapper">
-                    <img src="<?= $p['foto']; ?>" alt="<?= $p['nome']; ?>">
-                </div>
+            foreach ($carrinho as $item) {
 
-                <div class="card-info">
-                    <strong><?= $p['nome']; ?></strong>
-                    <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.'); ?></p>
-                </div>
+                if (empty($item['foto'])) {
+                    $stmt = $pdo->prepare("SELECT foto FROM produto WHERE id = ?");
+                    $stmt->execute([$item['produto_id']]);
+                    $foto = $stmt->fetchColumn();
+                } else {
+                    $foto = $item['foto'];
+                }
 
-                <div class="card-actions">
-                    <a href="EditarProdutos.php?id=<?= $p['id']; ?>" class="btn-editar">
-                        ✏ Editar
-                    </a>
-                    <a href="removerproduto.php?id=<?= $p['id']; ?>" class="btn-excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
-                        🗑 Excluir
-                    </a>
-                </div>
-            </div>
+                // Adicionei a classe 'carrinho-card' nesta div
+                echo "<div class='carrinho-card' style='border:1px solid #ccc; padding:10px; margin:10px; width:250px;'>";
+                echo "<img src='{$foto}' width='100' style='display:block;margin-bottom:10px;'>";
+                echo "<strong>{$item['nomeproduto']}</strong><br>";
+                echo "Tamanho: {$item['tamanho']}<br>";
+                echo "Quantidade: {$item['quantidade']}<br>";
+                echo "Preço: R$ {$item['preco']}<br><br>";
 
-        <?php endwhile; ?>
+                echo "<label class='lbl-check'>";
+                echo "<input type='checkbox' name='selecionados[{$item['id']}]' value='1'> Selecionar";
+                echo "</label><br>";
 
-    </div> <div class="area-voltar-admin">
-        <a href="home.php"><button class="btn-voltar">Voltar ao Site</button></a>
-    </div>
+                echo "<label class='lbl-qtd'>";
+                echo "Qtd para remover: <input type='number' name='quantidade[{$item['id']}]' min='1' max='{$item['quantidade']}' value='1'>";
+                echo "</label><br>";
+
+                echo "<label class='lbl-check'>";
+                echo "<input type='checkbox' name='remover_todo[{$item['id']}]' value='1'> Remover todo";
+                echo "</label>";
+
+                echo "</div>";
+            }
+
+            // Botões de ação do carrinho
+            echo "<div class='carrinho-actions'>";
+            echo "<button type='submit' class='btn-verde' formaction='../Scripts/whatsapp_selecionar.php' style='background:green;color:white;padding:10px;margin-top:10px;'>Comprar selecionados</button>";
+            echo "<button type='submit' class='btn-vermelho' formaction='../Scripts/remover_item.php' style='background:red;color:white;padding:10px;margin-top:10px;'>Remover selecionados</button>";
+            echo "</div>";
+            echo "</form>";
+
+            echo "<div class='botoes-nav'>";
+            echo "<a href='../Scripts/limparcarrinho.php'><button class='btn-cinza' style='background:#444;color:white; padding:10px;'>Limpar Carrinho</button></a><br><br>";
+            echo "<a href='../Scripts/logout.php'><button class='btn-nav'>Deslogar</button></a> ";
+            echo "<a href='home.php'><button class='btn-nav'>Voltar</button></a>";
+            echo "</div>";
+        }
+    } else {
+        echo "<h3>Opções Admin</h3><a href='GerenciarProds.php'><input class='btn-acao' type = 'submit' value= 'Gerenciar Produtos'></input></a>";
+        echo "<a href='../Scripts/logout.php'><button class='btn-nav'>Deslogar</button></a> ";
+    }
+    ?>
 
 </div>
 
@@ -479,9 +537,8 @@ $produtos = $pdo->query("SELECT * FROM produto ORDER BY id DESC");
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 
 </html>
-

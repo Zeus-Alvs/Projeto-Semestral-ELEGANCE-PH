@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../Scripts/config.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
@@ -10,34 +10,60 @@ if (!isset($_SESSION['usuario_id'])) {
 
 <?php
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+// Proteção admin
+if (!isset($_SESSION['usuario_id']) || $_SESSION['nivel'] !== 'admin') {
+    header("Location: home.php");
     exit;
 }
 
-$id_usuario = $_SESSION['usuario_id'];
+if (!isset($_GET['id'])) {
+    header("Location: home.php");
+    exit;
+}
 
-// PEGA O PRODUTO DO BANCO
-$id_produto = $_GET["id"];
-$sql = $pdo->prepare("SELECT * FROM produto WHERE id = ?");
-$sql->execute([$id_produto]);
-$produto = $sql->fetch(PDO::FETCH_ASSOC);
+
+$id = $_GET['id'];
+
+$stmt = $pdo->prepare("SELECT * FROM produto WHERE id = ?");
+$stmt->execute([$id]);
+$produto = $stmt->fetch();
 
 if (!$produto) {
-    echo "Produto não encontrado!";
+    echo "Produto não encontrado.";
+    exit;
+}
+
+if (isset($_POST['nome'])) {
+
+    $nome = $_POST['nome'];
+    $preco = $_POST['preco'];
+
+    $foto = $produto['foto'];
+
+    if (!empty($_FILES['foto']['name'])) {
+        $filename = time() . "_" . $_FILES['foto']['name'];
+        move_uploaded_file($_FILES['foto']['tmp_name'], "uploads/" . $filename);
+        $foto = "uploads/" . $filename;
+    }
+
+    $stmt = $pdo->prepare("UPDATE produto SET nome=?, preco=?,foto=? WHERE id=?");
+    $stmt->execute([$nome, $preco, $foto, $id]);
+
+    header("Location: editarprodutos.php");
     exit;
 }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Elegance PH</title>
     <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
 </head>
 <body>
+
 <!-- HEADER MENU INICIO AAAAA-->
 
   <header class="menu">
@@ -383,60 +409,51 @@ if (!$produto) {
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
-<div class="pagina-produto"> <div class="produto-grid">
+
+<div class="pagina-editar-produto"> <h1>Editar Produto</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="form-editar">
         
-        <div class="area-foto">
-            <img class="foto-destaque" src="<?php echo $produto['foto']; ?>" alt="<?php echo $produto['nome']; ?>">
-        </div>
-
-        <div class="area-info">
+        <div class="grid-editar">
             
-            <h2 class="produto-titulo"><?php echo $produto['nome']; ?></h2>
-            
-            <p class="produto-preco">R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+            <div class="col-foto">
+                <label class="titulo-campo">Foto Atual</label>
+                <div class="preview-container">
+                    <img src="<?= $produto['foto']; ?>" class="img-atual" alt="Foto Atual">
+                </div>
 
-            <form action="adicionar_item.php" method="POST" class="form-compra">
-                <input type="hidden" name="id_produto" value="<?php echo $produto['id']; ?>">
-                <input type="hidden" name="foto" value="<?php echo $produto['foto']; ?>">
+                <label class="titulo-campo">Trocar Foto</label>
+                <div class="upload-box">
+                    <input type="file" name="foto" id="nova-foto" class="input-file">
+                    <label for="nova-foto" class="label-fake-file">
+                        📂 Escolher nova imagem
+                    </label>
+                </div>
+            </div>
 
+            <div class="col-dados">
+                
                 <div class="grupo-input">
-                    <label>Tamanho:</label>
-                    <select name="tamanho" required>
-                        <option value="" disabled selected>Selecione</option>
-                        <option value="P">P</option>
-                        <option value="M">M</option>
-                        <option value="G">G</option>
-                        <option value="GG">GG</option>
-                    </select>
+                    <label class="titulo-campo">Nome do Produto</label>
+                    <input type="text" name="nome" class="input-texto" value="<?= $produto['nome']; ?>" required>
                 </div>
 
                 <div class="grupo-input">
-                    <label>Quantidade:</label>
-                    <input type="number" name="quantidade" min="1" value="1" required>
+                    <label class="titulo-campo">Preço (R$)</label>
+                    <input type="number" step="0.01" name="preco" class="input-texto" value="<?= $produto['preco']; ?>" required>
                 </div>
 
-                <button type="submit" class="btn-carrinho">Adicionar ao Carrinho</button>
+                <div class="grupo-botoes">
+                    <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                    
+                    <a href="GerenciarProds.php" class="btn-cancelar">Cancelar</a>
+                </div>
 
-                <div class="separador-ou"><span>OU</span></div>
+            </div>
 
-                <button class="btn-comprar-agora" type="submit" formaction="comprar_agora.php">
-                    Comprar Agora
-                </button>
-            </form>
+        </div> </form>
 
-            
-
-            <?php
-            $produtoMsg = urlencode(
-                "Produto: {$produto['nome']}\n".
-                "Preço: R$ {$produto['preco']}\n".
-                "Foto: {$produto['foto']}"
-            );
-            ?>
-
-            
-
-        </div> </div> </div>
+</div>
 
 <!-- rodape --> 
 <a class="WhtsAppFixo" href="https://wa.me/5513991462611" target="_blank" title="Fale conosco no WhatsApp">
@@ -503,7 +520,7 @@ if (!$produto) {
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 

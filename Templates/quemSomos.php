@@ -1,25 +1,22 @@
-<?php 
-session_start();  
+<?php
+session_start();
 if(!isset($_SESSION['usuario_id'])){
-  $cep = '00000-000';
-}else {
-  $cep = $_SESSION["usuario_cep"];
+    $cep = '00000-000';
+} else {
+    $cep = $_SESSION["usuario_cep"];
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="Imagens/icone-topo.png">
-  <link rel="stylesheet" href="stylev2.css">
-  <<title>Elegance PH</title>
+  <link rel="stylesheet" href="../Estilos/stylev2.css">
+  <title>Elegance PH</title>
 </head>
-
 <body>
-
-  <!-- HEADER MENU INICIO AAAAA-->
+<!-- HEADER MENU INICIO AAAAA-->
 
   <header class="menu">
     <div class="area-logo">
@@ -363,28 +360,56 @@ if(!isset($_SESSION['usuario_id'])){
   </header>
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
+</body>
+</html>
 
-  <div class="text-content">
-    <h2>Política de Frete</h2>
-    <h4>
-      <p>A entrega é sempre feita pelos Correios, porém, em alguns casos, como destinatário ausente, regiões com restrição de entrega, entre outros motivos, os Correios poderão deixar um aviso para retirar os produtos na agência mais próxima do endereço fornecido.</p>
-      <p>Alguns produtos apresentados em nosso site não se encontram no Brasil e são enviados diretamente de nossos fabricantes localizados na China.</p>
-      <p>O prazo de postagem dos produtos começa a vigorar logo após a aprovação de pagamento da compra, que pode variar de 1 a 3 dias úteis.</p>
-      <p>O prazo médio estimado de entrega dos produtos é de até 15-25 dias úteis, podendo haver variações por parte dos Correios e da Receita Federal.</p>
-      <p>Caso ocorra algum tipo de atraso nos Correios internacionais, esse prazo pode ser prolongado de até 15-20 dias.</p>
-      <p>*Áreas com restrição de entrega terão que ser retiradas na agência dos Correios.</p>
-      <p>Todas as compras possuem código de rastreamento enviado ao WhatsApp do cliente dentro do prazo de 10 dias úteis após a confirmação do pedido.</p>
-      <p>Caso o pedido seja de 2 ou mais produtos, os mesmos poderão ser enviados em fretes separados com códigos de rastreamento individuais.</p>
-      <p>Pedimos atenção no preenchimento do endereço de entrega para garantir que a mesma seja feita dentro do prazo estabelecido.</p>
-      <p>Por se tratar de encomenda internacional, as informações de rastreamento podem ocorrer entre 2 a 7 dias após informarmos o código.</p>
-      <p>Produtos danificados durante o transporte são da responsabilidade dos serviços postais.</p>
-      <p>O preenchimento do endereço deve ser revisado pelo comprador antes da confirmação da compra, havendo devolução por endereço incorreto será de responsabilidade do cliente.</p>
-      <p>Em caso de tentativa de entrega sem sucesso, os produtos ficarão na agência à disposição do cliente, podendo ser devolvidos ao remetente no exterior.</p>
-      <p>Após confirmação de reenvio, o prazo de entrega começa a valer novamente.</p>
-      <p>Por se tratar de importação, toda mercadoria está sujeita a burocracias ou tributações alfandegárias.</p>
-      <p>TRIBUTAÇÃO ALFANDEGÁRIA: Todos os produtos enviados do exterior estão sujeitos a tributação alfandegária. O valor das tarifas é de 20 a 30 reais. O pagamento da taxa é de responsabilidade do cliente.</p>
-      <p>O tempo de estimativa de entrega é apenas uma base. Pedimos paciência, pois os produtos importados podem demorar.</p>
-    </h4>
+
+  <div class="oi">
+    <h2 class="titulo1">Quem Somos - Elegance PH</h2>
+    <div class="divOi">
+      <p class="texto1">Seja bem-vindo à Elegance PH! Somos uma loja movida por estilo, identidade e atitude.
+        Fundada por Pietro Henrique, nossa missão é oferecer o melhor da moda urbana — tênis, roupas e
+        acessórios — para quem carrega orgulho de suas raízes e quer expressar sua essência com autenticidade.
+      </p>
+    </div>
+
+    <h2 class="titulo2">A Nossa História</h2>
+    <div class="divOi">
+      <p class="texto2">Tudo começou com a ideia de unir duas paixões da vida de Pietro: a moda e o corre de todo dia.
+        Com o tempo, ele percebeu que vestir-se bem vai além da estética — é uma forma de representar a
+        cultura, contar histórias e afirmar quem você é. Assim nasceu a Elegance PH: uma marca com
+        propósito, que leva as tendências mais originais e verdadeiras pra você vestir sua identidade com
+        confiança.
+      </p>
+    </div>
+
+    <h2 class="titulo3">A Nossa Missão</h2>
+    <div class="divOi">
+      <p class="texto3">
+        Nossa missão é destacar e valorizar a essência única de cada pessoa, proporcionando uma experiência de
+        compra marcante e oferecendo produtos de qualidade que traduzem o verdadeiro espírito das ruas, das
+        comunidades
+        e das histórias reais.</p>
+    </div>
+
+    <h2 class="titulo4">O Que Oferecemos</h2>
+    <div class="divOi">
+      <p class="texto4">Na Elegance PH, você
+        encontra uma curadoria especial de tênis, roupas, bonés e acessórios com influência da moda urbana e das
+        tendências atuais.
+        Trabalhamos com marcas reconhecidas e também damos espaço para talentos locais, criando coleções exclusivas
+        com significado, atitude e representatividade.</p>
+    </div>
+
+    <h2 class="titulo5">Gratidão</h2>
+    <div class="divOi">
+      <p class="texto5">Somos gratos a todos que fazem parte dessa caminhada — clientes, parceiros e colaboradores.
+        Cada conquista é resultado da confiança e do apoio que recebemos. Seguimos juntos, com muito estilo e
+        propósito,
+        fazendo nosso corre valer a pena.
+
+        Pietro Henrique e equipe Elegance PH</p>
+    </div>
   </div>
 
   <!-- rodape --> 
@@ -452,7 +477,6 @@ if(!isset($_SESSION['usuario_id'])){
   </div>
 </footer>
 
-  <script src="Eleganceph.js"></script>
-
+  <script src="../Estilos/Eleganceph.js"></script>
 </body>
 </html>

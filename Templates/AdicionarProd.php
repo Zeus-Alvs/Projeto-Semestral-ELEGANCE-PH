@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../Scripts/config.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
@@ -10,42 +10,43 @@ if (!isset($_SESSION['usuario_id'])) {
 
 <?php
 
-$erro = "";
+// Proteção admin
+if (!isset($_SESSION['usuario_id']) || $_SESSION['nivel'] !== 'admin') {
+    header("Location: home.php");
+    exit;
+}
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $email = trim($_POST["email"]);
-    $senha = trim($_POST["senha"]);
+if (isset($_POST['nome'])) {
 
-    $stmt = $pdo->prepare("SELECT * FROM usuario WHERE email = ?");
-    $stmt->execute([$email]);
+    $nome = $_POST['nome'];
+    $preco = $_POST['preco'];
+    $tipo = $_POST['tipo'];
+    $marca = $_POST['marca'];
+    $genero = $_POST['genero'];
 
-    if($stmt->rowCount() > 0){
-        $user = $stmt->fetch();
+    $foto = null;
 
-        if(password_verify($senha, $user["senha"])){
-
-            $_SESSION["usuario_id"] = $user["id"];
-            $_SESSION["usuario_nome"] = $user["nome"];
-            $_SESSION["usuario_foto"] = $user["foto"] ?: "Imagens/ICON USUARIO.png";
-            $_SESSION["usuario_email"] = $user["email"];
-            $_SESSION["usuario_cep"] = $user["CEP"];
-            $_SESSION['nivel'] = $user["nivel"];
-            header("Location: home.php");
-            exit;
-        }
+    if (!empty($_FILES['foto']['name'])) {
+        $filename = time() . "_" . $_FILES['foto']['name'];
+        move_uploaded_file($_FILES['foto']['tmp_name'], "../imagemProds/" . $filename);
+        $foto = "imagemProds/" . $filename;
     }
-    $erro = "Email ou senha incorretos.";
+
+    $stmt = $pdo->prepare("INSERT INTO produto (nome, preco, foto,tipo,marca,genero) VALUES (?, ?, ?,?,?,?)");
+    $stmt->execute([$nome, $preco, $foto,$tipo,$marca,$genero]);
+
+    header("Location: editarprodutos.php");
+    exit;
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegance PH</title>
     <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
+    <title>Elegance PH</title>
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
 </head>
 <body>
 
@@ -393,37 +394,95 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   </header>
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
+<div class="pagina-adicionar"> <div class="header-adicionar">
+        <h1>Adicionar Produto</h1>
+        <p>Preencha os dados abaixo para cadastrar um novo item no catálogo.</p>
+    </div>
 
-<div class="pagina-login"> <div class="card-login">
-        <h2>Bem-vindo(a)</h2>
-        <p class="subtitulo">Faça login para acessar sua conta</p>
-
-        <?php if (!empty($erro)): ?>
-            <div class="msg-erro-login">
-                ⚠️ <?php echo $erro ?>
-            </div>
-        <?php endif; ?>
-
-        <form method="POST" class="form-login">
+    <form method="POST" enctype="multipart/form-data" class="form-grid">
+        
+        <div class="coluna-principal">
             
             <div class="grupo-input">
-                <label>Email</label>
-                <input type="email" name="email" class="input-padrao" placeholder="seu@email.com" required>
+                <label>Nome do Produto</label>
+                <input type="text" name="nome" class="input-estilizado" placeholder="Ex: Camiseta Nike Air" required>
             </div>
 
             <div class="grupo-input">
-                <label>Senha</label>
-                <input type="password" name="senha" class="input-padrao" placeholder="********" required>
+                <label>Preço (R$)</label>
+                <input type="number" name="preco" step="0.01" class="input-estilizado" placeholder="0.00" required>
             </div>
 
-            <button type="submit" class="btn-entrar">Entrar</button>
-        </form>
+            <div class="grupo-input">
+                <label>Foto do Produto</label>
+                <div class="upload-box">
+                    <input type="file" name="foto" id="file-upload" class="input-file" required>
+                    <label for="file-upload" class="label-fake-file">
+                        📷 Clique para selecionar a imagem
+                    </label>
+                </div>
+            </div>
 
-        <div class="footer-login">
-            <span class="texto-footer">Ainda não tem conta?</span>
-            <a href="cadastro.php" class="link-cadastro">Cadastre-se aqui</a>
         </div>
-    </div>
+
+        <div class="coluna-lateral">
+            <h3 class="titulo-secao">Categorias</h3>
+
+            <div class="grupo-input">
+                <label>Marca</label>
+                <div class="select-wrapper">
+                    <?php 
+                    $marcas = ['Nike','HugoBoss','Mizuno','Puma', 'Adidas'];
+                    $tamanho = count($marcas);
+                    echo "<select name='marca' required>";
+                    echo "<option value=''>Selecione a marca...</option>";
+                    for($c = 0; $c<$tamanho; $c++){
+                        echo "<option value={$marcas[$c]}>{$marcas[$c]}</option>";
+                    }
+                    echo "</select>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="grupo-input">
+                <label>Gênero</label>
+                <div class="select-wrapper">
+                    <?php 
+                    echo "<select name='genero' required>";
+                    echo "<option value=''>Selecione o gênero...</option>";
+                    $genero = ['Masculino','Feminino','Unissex'];
+                    for($c=0;$c<3;$c++){
+                        echo "<option value={$genero[$c]}>{$genero[$c]}</option>";
+                    }
+                    echo "</select>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="grupo-input">
+                <label>Tipo de Peça</label>
+                <div class="select-wrapper">
+                    <?php
+                    echo "<select name='tipo' required>";
+                    echo "<option value=''>Selecione o tipo...</option>";
+                    $tipos = ['Camiseta','Tenis','Chuteira','Top','Legging','Meia','Mochila','Bone','Shorts','Bermuda'];
+                    $tamanho = count($tipos);
+                    for($c = 0; $c<$tamanho; $c++){
+                        echo "<option value={$tipos[$c]}>{$tipos[$c]}</option>";
+                    }
+                    echo "</select>";
+                    ?>
+                </div>
+            </div>
+
+            <div class="area-botoes">
+                <button type="submit" class="btn-salvar">Salvar Produto</button>
+                <a href="GerenciarProds.php" class="btn-cancelar">Cancelar</a>
+            </div>
+
+        </div>
+
+    </form>
 
 </div>
 
@@ -492,9 +551,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 
 </html>
+
 

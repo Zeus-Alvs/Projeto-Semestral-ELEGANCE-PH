@@ -1,69 +1,31 @@
-<?php
-require 'config.php';
-session_start();
-if (!isset($_SESSION['usuario_id'])) {
+<?php 
+require '../Scripts/config.php';
+session_start();  
+if(!isset($_SESSION['usuario_id'])){
   $cep = '00000-000';
-} else {
+}else {
   $cep = $_SESSION["usuario_cep"];
 }
 ?>
 
-<?php
-
-// Proteção admin
-if (!isset($_SESSION['usuario_id']) || $_SESSION['nivel'] !== 'admin') {
-    header("Location: home.php");
-    exit;
-}
-
-if (!isset($_GET['id'])) {
-    header("Location: home.php");
-    exit;
-}
 
 
-$id = $_GET['id'];
 
-$stmt = $pdo->prepare("SELECT * FROM produto WHERE id = ?");
-$stmt->execute([$id]);
-$produto = $stmt->fetch();
 
-if (!$produto) {
-    echo "Produto não encontrado.";
-    exit;
-}
 
-if (isset($_POST['nome'])) {
-
-    $nome = $_POST['nome'];
-    $preco = $_POST['preco'];
-
-    $foto = $produto['foto'];
-
-    if (!empty($_FILES['foto']['name'])) {
-        $filename = time() . "_" . $_FILES['foto']['name'];
-        move_uploaded_file($_FILES['foto']['tmp_name'], "uploads/" . $filename);
-        $foto = "uploads/" . $filename;
-    }
-
-    $stmt = $pdo->prepare("UPDATE produto SET nome=?, preco=?,foto=? WHERE id=?");
-    $stmt->execute([$nome, $preco, $foto, $id]);
-
-    header("Location: editarprodutos.php");
-    exit;
-}
-?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Elegance PH</title>
-    <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
-</head>
-<body>
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Imagens/icone-topo.png">
+  <link rel="stylesheet" href="../Estilos/stylev2.css">
+  <title>Elegance PH</title>
+</head>
+
+<body>
 <!-- HEADER MENU INICIO AAAAA-->
 
   <header class="menu">
@@ -410,49 +372,261 @@ if (isset($_POST['nome'])) {
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
 
-<div class="pagina-editar-produto"> <h1>Editar Produto</h1>
+<?php 
+require '../Scripts/config.php';
+?>
 
-    <form method="POST" enctype="multipart/form-data" class="form-editar">
+<!-- ▬▬▬▬▬▬▬ BOTÃO DE FILTRO ▬▬▬▬▬▬▬ -->
+<?php 
+if (isset($_SESSION['usuario_id'])) {
+
+    if ($_SESSION['nivel'] === 'admin') {
+        echo "<h2 style='text-align: center; margin:0;';>Editar Produtos</h2>";
+
+    } else {
+        echo "<h1 style='text-align: center; margin:0;';>Nossos Produtos</h1>";
+    }
+
+} else {
+    echo "<h2 class='txtprd'>Mais Vendidos</h2>";
+}
+?>
+
+<div class="ordenar">
+    <label>Ordenar por:</label>
+    <select id="ordenaPor">
+        <option value="evendidos" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'evendidos') ? 'selected' : ''; ?>>Mais vendidos</option>
+        <option value="avendidos" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'avendidos') ? 'selected' : ''; ?>>Menos vendidos</option>
+        <option value="epreco" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'epreco') ? 'selected' : ''; ?>>Menor preço</option>
+        <option value="apreco" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'apreco') ? 'selected' : ''; ?>>Maior preço</option>
+    </select>
+</div>
+
+<div class="container">
+
+<?php
+// 1. Captura os dados
+// Nota: Para checkboxes, o PHP já cria um array automaticamente se o nome for marca[]
+$filtroOrdem  = $_GET['ordem']  ?? 'evendidos';
+$filtroPreco  = $_GET['preco']  ?? '';
+$filtroGenero = $_GET['genero'] ?? '';
+
+// Captura arrays (se não vier nada, define como array vazio)
+$filtroMarcas = $_GET['marca'] ?? []; 
+$filtroTipos  = $_GET['tipos'] ?? [];
+
+// Garante que sejam arrays (caso venha string suja)
+if (!is_array($filtroMarcas)) $filtroMarcas = [$filtroMarcas];
+if (!is_array($filtroTipos))  $filtroTipos  = [$filtroTipos];
+
+// 2. Query Base
+$sql = "SELECT id, nome, foto, marca, preco, genero, tipo FROM produto WHERE 1=1";
+$params = []; 
+
+// 3. Filtro de MARCAS (Lógica Multi-Select)
+if (!empty($filtroMarcas)) {
+    // Cria placeholders dinâmicos: :m0, :m1, :m2...
+    $binds = [];
+    foreach ($filtroMarcas as $k => $marca) {
+        $key = ":marca_{$k}";
+        $binds[] = $key;
+        $params[$key] = $marca;
+    }
+    // Resulta em: AND marca IN (:marca_0, :marca_1)
+    $sql .= " AND marca IN (" . implode(',', $binds) . ")";
+}
+
+// 4. Filtro de TIPOS (Lógica Multi-Select)
+if (!empty($filtroTipos)) {
+    $binds = [];
+    foreach ($filtroTipos as $k => $tipo) {
+        $key = ":tipo_{$k}";
+        $binds[] = $key;
+        $params[$key] = $tipo;
+    }
+    $sql .= " AND tipo IN (" . implode(',', $binds) . ")";
+}
+
+// 5. Filtros Simples (Gênero e Preço mantêm lógica antiga)
+if (!empty($filtroGenero)) {
+    if ($filtroGenero == 'Masculino') {
+        // Se escolheu Masculino -> Busca Masculino OU Unissex
+        $sql .= " AND genero IN ('Masculino', 'Unissex')";
         
-        <div class="grid-editar">
-            
-            <div class="col-foto">
-                <label class="titulo-campo">Foto Atual</label>
-                <div class="preview-container">
-                    <img src="<?= $produto['foto']; ?>" class="img-atual" alt="Foto Atual">
-                </div>
+    } elseif ($filtroGenero == 'Feminino') {
+        // Se escolheu Feminino -> Busca Feminino OU Unissex
+        $sql .= " AND genero IN ('Feminino', 'Unissex')";
+        
+    } elseif ($filtroGenero == 'Unissex') {
+        // Se escolheu Unissex -> Busca APENAS Unissex
+        $sql .= " AND genero = :genero";
+        $params[':genero'] = 'Unissex';
+    }
+}
 
-                <label class="titulo-campo">Trocar Foto</label>
-                <div class="upload-box">
-                    <input type="file" name="foto" id="nova-foto" class="input-file">
-                    <label for="nova-foto" class="label-fake-file">
-                        📂 Escolher nova imagem
-                    </label>
-                </div>
-            </div>
+if (!empty($filtroPreco)) {
+    $range = explode('-', $filtroPreco);
+    if (count($range) == 2) {
+        $sql .= " AND preco >= :min AND preco <= :max";
+        $params[':min'] = (float)$range[0];
+        $params[':max'] = (float)$range[1];
+    }
+}
 
-            <div class="col-dados">
+// 6. Ordenação
+switch ($filtroOrdem) {
+    case 'epreco':    $sql .= " ORDER BY preco ASC"; break;
+    case 'apreco':    $sql .= " ORDER BY preco DESC"; break;
+    case 'avendidos': $sql .= " ORDER BY vendidos ASC"; break;
+    case 'evendidos': 
+    default:          $sql .= " ORDER BY vendidos DESC"; break;
+}
+
+// 7. Execução
+try {
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Erro: " . $e->getMessage();
+    $produtos = [];
+}
+?>
+
+    <div id="filtrosContainer">
+        <div class="barra">
+            <div class="Ord">
+                <h2 class="txtOrd">Filtros</h2>
+
+                <label for="filtroPreco">Preço:</label>
+                <select id="filtroPreco">
+                    <option value="">Todos os preços</option>
+                    <option value="0-100" <?php echo (isset($_GET['preco']) && $_GET['preco'] == '0-100') ? 'selected' : ''; ?>>Até R$100</option>
+                    <option value="100-200" <?php echo (isset($_GET['preco']) && $_GET['preco'] == '100-200') ? 'selected' : ''; ?>>R$100 a R$200</option>
+                    <option value="200-300" <?php echo (isset($_GET['preco']) && $_GET['preco'] == '200-300') ? 'selected' : ''; ?>>R$200 a R$300</option>
+                    <option value="300-10000" <?php echo (isset($_GET['preco']) && $_GET['preco'] == '300-10000') ? 'selected' : ''; ?>>Acima de R$300</option>
+                </select>
+
+                <label for="filtroGenero">Gênero:</label>
+                <select id="filtroGenero">
+                    <option value="">Todos os gêneros</option>
+                    <option value="Masculino" <?php echo (isset($_GET['genero']) && $_GET['genero'] == 'Masculino') ? 'selected' : ''; ?>>Masculino</option>
+                    <option value="Feminino" <?php echo (isset($_GET['genero']) && $_GET['genero'] == 'Feminino') ? 'selected' : ''; ?>>Feminino</option>
+                    <option value="Unissex" <?php echo (isset($_GET['genero']) && $_GET['genero'] == 'Unissex') ? 'selected' : ''; ?>>Unissex</option>
+                </select>
+
+                <label for="filtroMarca">Marca:</label>
+                <label>
+                  <input type="checkbox" class="filtro-check" name="marca[]" value="NIKE" 
+                  <?php echo (in_array('NIKE', $filtroMarcas)) ? 'checked' : ''; ?>> Nike
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="marca[]" value="ADIDAS" 
+                  <?php echo (in_array('ADIDAS', $filtroMarcas)) ? 'checked' : ''; ?>> Adidas
+                </label>
+    
+                <label>
+                  <input type="checkbox" class="filtro-check" name="marca[]" value="PUMA" 
+                  <?php echo (in_array('PUMA', $filtroMarcas)) ? 'checked' : ''; ?>> Puma
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="marca[]" value="MIZUNO" 
+                  <?php echo (in_array('MIZUNO', $filtroMarcas)) ? 'checked' : ''; ?>> Mizuno
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="marca[]" value="HUGOBOSS" 
+                  <?php echo (in_array('HUGOBOSS', $filtroMarcas)) ? 'checked' : ''; ?>> Hugo Boss
+                </label>
+
+                <label for="filtroTipo">Tipo:</label>
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Camiseta" 
+                  <?php echo (in_array('Camiseta', $filtroTipos)) ? 'checked' : ''; ?>> Camiseta
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Tenis" 
+                  <?php echo (in_array('Tenis', $filtroTipos)) ? 'checked' : ''; ?>> Tenis
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Bermuda" 
+                  <?php echo (in_array('Bermuda', $filtroTipos)) ? 'checked' : ''; ?>> Bermuda
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Legging" 
+                  <?php echo (in_array('Legging', $filtroTipos)) ? 'checked' : ''; ?>> Leggings
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Bone" 
+                  <?php echo (in_array('Bone', $filtroTipos)) ? 'checked' : ''; ?>> Bone
+                </label>
                 
-                <div class="grupo-input">
-                    <label class="titulo-campo">Nome do Produto</label>
-                    <input type="text" name="nome" class="input-texto" value="<?= $produto['nome']; ?>" required>
-                </div>
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Shorts" 
+                  <?php echo (in_array('Shorts', $filtroTipos)) ? 'checked' : ''; ?>> Shorts
+                </label>
 
-                <div class="grupo-input">
-                    <label class="titulo-campo">Preço (R$)</label>
-                    <input type="number" step="0.01" name="preco" class="input-texto" value="<?= $produto['preco']; ?>" required>
-                </div>
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Mochila" 
+                  <?php echo (in_array('Mochila', $filtroTipos)) ? 'checked' : ''; ?>> Mochila
+                </label>
 
-                <div class="grupo-botoes">
-                    <button type="submit" class="btn-salvar">Salvar Alterações</button>
-                    
-                    <a href="GerenciarProds.php" class="btn-cancelar">Cancelar</a>
-                </div>
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Chuteira" 
+                  <?php echo (in_array('Chuteira', $filtroTipos)) ? 'checked' : ''; ?>> Chuteira
+                </label>
 
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Top" 
+                  <?php echo (in_array('Top', $filtroTipos)) ? 'checked' : ''; ?>> Top
+                </label>
+
+                <label>
+                  <input type="checkbox" class="filtro-check" name="tipos[]" value="Meia" 
+                  <?php echo (in_array('Meia', $filtroTipos)) ? 'checked' : ''; ?>> Meia
+                </label>
+                </select>
             </div>
+        </div>
+        <a href="produto.php">
+          <button class="btn-acao">Limpar Filtros</button>
+        </a>
+    </div>
 
-        </div> </form>
 
+    <div class='produtos'>
+        <?php
+        if (count($produtos) > 0) {
+            foreach ($produtos as $produto) {
+                // Não precisamos mais dos atributos data-* para filtro JS, 
+                // mas mantê-los não atrapalha
+                echo "
+                <div class='produto'>
+                ";
+                
+                $link = (isset($_SESSION['usuario_id']) && $_SESSION['nivel'] === 'admin') ? "EditarProdutos.php?id={$produto['id']}" : "produtos.php?id={$produto['id']}";
+                
+                echo "
+                    <a href='$link'>
+                        <img src='{$produto['foto']}' alt='{$produto['nome']}'>
+                        <div class='info-slide'>
+                            <p class='nome'>".$produto["nome"]."</p>
+                            <p class='preco'>R$ ".number_format($produto["preco"], 2, ",", ".")."</p>
+                        </div>
+                    </a>
+                </div>";
+            }
+        } else {
+            echo "<p style='padding:20px; width:100%; text-align:center;'>Nenhum produto encontrado com esses filtros.</p>";
+        }
+        ?>
+    </div>
 </div>
 
 <!-- rodape --> 
@@ -520,9 +694,7 @@ if (isset($_POST['nome'])) {
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+  <script src="../Estilos/Eleganceph.js"></script>
 
 </body>
-
 </html>
-

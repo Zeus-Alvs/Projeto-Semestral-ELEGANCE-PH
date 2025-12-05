@@ -1,38 +1,99 @@
-<?php 
-require 'config.php';
-session_start();  
-if(!isset($_SESSION['usuario_id'])){
+<?php
+require '../Scripts/config.php';
+session_start();
+if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
-}else {
+} else {
   $cep = $_SESSION["usuario_cep"];
 }
 ?>
 
-
 <?php
-$query = $pdo->query('SELECT id, nome, foto, marca, preco, genero, tipo FROM produto');
-$produtos = $query->fetchAll(PDO::FETCH_ASSOC);
+require '../Scripts/config.php';
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
-    exit;
+$erro = "";
+$ok = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    $nome = trim($_POST["nome"]);
+    $email = trim($_POST["email"]);
+    $senha = trim($_POST["senha"]);
+    $cep = trim($_POST["cep"]);
+    $rua = $_POST['rua'];
+    $Bairro = $_POST['bairro'];
+    $Cidade = $_POST['cidade'];
+    $Estado = $_POST['estado'];
+    $Complemento = $_POST['complemento'];
+    $Numero = $_POST['numero'];
+
+    //  VALIDA CAMPOS OBRIGATÓRIOS
+    if(empty($nome) || empty($email) || empty($senha) || empty($cep)){
+        $erro = "Preencha todos os campos obrigatórios!";
+    } 
+    else {
+
+        //  VALIDA E-MAIL
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $erro = "E-mail inválido!";
+        }
+
+        //  VALIDA SENHA
+        elseif (strlen($senha) < 6) {
+            $erro = "A senha deve ter pelo menos 6 caracteres!";
+        }
+        elseif (!preg_match("/[0-9]/", $senha)) {
+            $erro = "A senha deve conter pelo menos um número!";
+        }
+        elseif (!preg_match("/[^a-zA-Z0-9]/", $senha)) {
+            $erro = "A senha deve conter pelo menos um caractere especial!";
+        }
+
+        // Se NÃO houver erro, prosseguir com cadastro
+        else {
+
+            //  UPLOAD DE FOTO
+            $foto = "";
+            if(!empty($_FILES["foto"]["name"])){
+                $foto = "../uploads/" . uniqid() . "_" . $_FILES["foto"]["name"];
+                move_uploaded_file($_FILES["foto"]["tmp_name"], $foto);
+            }
+
+            //  SALVA NO BANCO
+            $stmt = $pdo->prepare("INSERT INTO usuario 
+                (nome,email,senha,foto,cep,rua,numero,complemento,Bairro,Estado,Cidade)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+
+            $stmt->execute([
+                $nome,
+                $email,
+                password_hash($senha, PASSWORD_DEFAULT),
+                $foto ?: null,
+                $cep,
+                $rua,
+                $Numero,
+                $Complemento,
+                $Bairro,
+                $Estado,
+                $Cidade
+            ]);
+
+            header("Location: login.php");
+            exit;
+        }
+    }
 }
-
-$termo = isset($_GET['pesquisa']) ? trim($_GET['pesquisa']) : "";
-
-$stmt = $pdo->prepare("SELECT * FROM produto WHERE nome LIKE ?");
-$stmt->execute(["%$termo%"]);
-$resultados = $stmt->fetchAll();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar</title>
     <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
+    <title>Elegance PH</title>
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
 </head>
 <body>
 
@@ -381,130 +442,92 @@ $resultados = $stmt->fetchAll();
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
-<h2>Resultados para: <?= htmlspecialchars($termo) ?></h2>
+<div class="pagina-cadastro">
 
-<!-- ▬▬▬▬▬▬▬ BOTÃO DE FILTRO ▬▬▬▬▬▬▬ -->
-
-<div class="ordenar">
-    <label>Ordenar por:</label>
-    <select id="ordenaPor">
-        <option value="evendidos" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'evendidos') ? 'selected' : ''; ?>>Mais vendidos</option>
-        <option value="avendidos" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'avendidos') ? 'selected' : ''; ?>>Menos vendidos</option>
-        <option value="epreco" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'epreco') ? 'selected' : ''; ?>>Menor preço</option>
-        <option value="apreco" <?php echo (isset($_GET['ordem']) && $_GET['ordem'] == 'apreco') ? 'selected' : ''; ?>>Maior preço</option>
-    </select>
-</div>
-<div class="container">
-<?php
-    $filtroOrdem = $_GET['ordem'] ?? 'evendidos';
-    $sqlOrderBy = "";
-
-switch ($filtroOrdem) {
-    case 'epreco':
-        $sqlOrderBy = "ORDER BY preco ASC"; 
-        break;
-    case 'apreco':
-        $sqlOrderBy = "ORDER BY preco DESC"; 
-        break;
-    case 'avendidos':
-        $sqlOrderBy = "ORDER BY vendidos ASC"; 
-        break;
-    case 'evendidos':
-    default:
-        $sqlOrderBy = "ORDER BY vendidos DESC"; 
-        break;
-}
-    $sql = "SELECT id, nome, foto, marca, preco, genero, tipo FROM produto " . $sqlOrderBy;
-    $query = $pdo->query($sql);
-    $produtos = $query->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<!-- ▬▬▬▬▬▬▬ CONTAINER DOS FILTROS ▬▬▬▬▬▬▬ -->
-    <div id="filtrosContainer">
-        <div class="barra">
-        <div class="Ord">
-                <h2 class="txtOrd">Filtros</h2>
-
-                <label for="filtroMarca">Marca:</label>
-                <select id="filtroMarca">
-                    <option value="">Todas as marcas</option>
-                    <option value="NIKE">Nike</option>
-                    <option value="HUGOBOSS">Hugo Boss</option>
-                    <option value="MIZUNO">Mizuno</option>
-                    <option value="PUMA">Puma</option>
-                    <option value="ADIDAS">Adidas</option>
-                </select>
-
-                <label for="filtroPreco">Preço:</label>
-                <select id="filtroPreco">
-                    <option value="">Todos os preços</option>
-                    <option value="0-100">Até R$100</option>
-                    <option value="100-200">R$100 a R$200</option>
-                    <option value="200-300">R$200 a R$300</option>
-                    <option value="300-10000">Acima de R$300</option>
-                </select>
-
-                <label for="filtroGenero">Gênero:</label>
-                <select id="filtroGenero">
-                    <option value="">Todos os gêneros</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Feminino">Feminino</option>
-                    <option value="Unissex">Unissex</option>
-                </select>
-
-                <label for="filtroTipo">Tipo:</label>
-                <select id="filtroTipo">
-                    <option value="">Todos os tipos</option>
-                    <option value="Camiseta">Camiseta</option>
-                    <option value="Tenis">Tênis</option>
-                    <option value="Bermuda">Bermuda</option>
-                </select>
-            </div>
+    <div class="card-cadastro">
+        <div class="header-cadastro">
+            <h2>Crie sua conta</h2>
+            <p>Preencha os dados abaixo para se registrar.</p>
         </div>
-    </div>
 
+        <?php if (!empty($erro)): ?>
+            <div class="msg-erro-login">⚠️ <?php echo $erro ?></div>
+        <?php endif; ?>
 
-<div class='produtos'>
+        <form method="POST" enctype="multipart/form-data" class="form-grid-cadastro">
+            
+            <div class="coluna-form">
+                <h3 class="titulo-secao-form">Dados de Acesso</h3>
+                
+                <div class="grupo-input">
+                    <label>Nome Completo</label>
+                    <input type="text" name="nome" class="input-padrao" required>
+                </div>
 
-<?php if (count($resultados) > 0): ?>
-<?php
-foreach ($resultados as $item){
-    // DIV com os atributos usados pelo JavaScript
-    echo "
-    <div class='produto'
-        data-marca='{$item['marca']}'
-        data-preco='{$item['preco']}'
-        data-genero='{$item['genero']}'
-        data-tipo='{$item['tipo']}'
-    >";
-    
-    if ($_SESSION['nivel'] === 'admin') {
-        echo "
-        <a href='EditarProdutos.php?id={$item['id']}'>
-            <img src='{$item['foto']}' alt='{$item['nome']}'>
-            <div class='info-slide'>
-                <p class='nome'>".$item["nome"]."</p>
-                <p class='preco'>R$ ".number_format($item["preco"], 2, ",", ".")."</p>
+                <div class="grupo-input">
+                    <label>Email</label>
+                    <input type="email" name="email" class="input-padrao" required>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Senha</label>
+                    <input type="password" name="senha" class="input-padrao" required>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Foto de Perfil (Opcional)</label>
+                    <input type="file" name="foto" accept="image/*" class="input-file-simples">
+                </div>
             </div>
-        </a>";
-    } else {
-        echo "
-        <a href='produtos.php?id={$item['id']}'>
-            <img src='{$item['foto']}' alt='{$item['nome']}'>
-            <div class='info-slide'>
-                <p class='nome'>".$item["nome"]."</p>
-                <p class='preco'>R$ ".number_format($item["preco"], 2, ",", ".")."</p>
-            </div>
-        </a>";
-    }
 
-    echo "</div>";
-}
-?>
+            <div class="coluna-form">
+                <h3 class="titulo-secao-form">Endereço</h3>
+
+                <div class="grupo-input">
+                    <label>CEP</label>
+                    <input type="text" id="cep" name="cep" class="input-padrao" required>
+                </div>
+
+                <div class="linha-dupla">
+                    <div class="grupo-input metade">
+                        <label>Rua</label>
+                        <input type="text" id="rua" name="rua" class="input-padrao" required>
+                    </div>
+                     <div class="grupo-input metade">
+                        <label>Número</label>
+                        <input type="text" name="numero" class="input-padrao" required>
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Bairro</label>
+                    <input type="text" id="bairro" name="bairro" class="input-padrao">
+                </div>
+
+                <div class="linha-dupla">
+                    <div class="grupo-input metade">
+                        <label>Cidade</label>
+                        <input type="text" id="cidade" name="cidade" class="input-padrao">
+                    </div>
+                    <div class="grupo-input metade">
+                        <label>Estado</label>
+                        <input type="text" id="estado" name="estado" class="input-padrao">
+                    </div>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Complemento</label>
+                    <input type="text" name="complemento" class="input-padrao" required>
+                </div>
+            </div>
+
+            <div class="area-btn-cadastro">
+                <button type="submit" class="btn-cadastrar">Finalizar Cadastro</button>
+                <a href="login.php" class="link-voltar">Já tenho conta</a>
+            </div>
+
+        </form>
     </div>
-<?php else: ?>
-    <p>Nenhum item encontrado.</p>
-<?php endif; ?>
 </div>
 
 <!-- rodape --> 
@@ -572,9 +595,10 @@ foreach ($resultados as $item){
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 
 </html>
+
 

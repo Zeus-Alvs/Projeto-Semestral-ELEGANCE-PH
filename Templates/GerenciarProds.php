@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../Scripts/config.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
@@ -8,57 +8,30 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 ?>
 
-<?php 
+<?php
 
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
+// Proteção admin
+if (!isset($_SESSION['usuario_id']) || $_SESSION['nivel'] !== 'admin') {
+    header("Location: home.php");
     exit;
 }
 
-$id = $_SESSION['usuario_id'];
-
-// Busca informações do usuário
-$infosusuario = $pdo->prepare("SELECT * FROM usuario WHERE id = ?");
-$infosusuario->execute([$id]);
-$infos = $infosusuario->fetch();
-
-// Processa envio do formulário
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = trim($_POST['nome']);
-    $cpf = trim($_POST['cpf']);
-    $cep = trim($_POST['cep']);
-    $rua = trim($_POST['rua']);
-    $numero = trim($_POST['numero']);
-    $comp = trim($_POST['complemento']);
-
-    if (empty($nome) || empty($cep) || empty($cpf)) {
-        echo '<script>alert("Por favor, preencha os campos obrigatórios (Nome, CPF e CEP).");</script>';
-    } else {
-        // Atualiza banco de dados
-        $alterarinfos = $pdo->prepare("UPDATE usuario SET nome = ?, cpf = ?, CEP = ?, rua = ?, numero = ?, complemento = ? WHERE id = ?");
-        $alterarinfos->execute([$nome, $cpf, $cep, $rua, $numero, $comp, $id]);
-
-        // Atualiza sessão com novo nome
-        $_SESSION['usuario_nome'] = $nome;
-
-        echo '<script>alert("Dados alterados com sucesso!"); window.location.href="dashboard.php";</script>';
-        exit;
-    }
-}
+$produtos = $pdo->query("SELECT * FROM produto ORDER BY id DESC");
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
     <title>Elegance PH</title>
+    <link rel="icon" href="Imagens/icone-topo.png">
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
 </head>
 <body>
 
-<header class="menu">
+<!-- HEADER MENU INICIO AAAAA-->
+
+  <header class="menu">
     <div class="area-logo">
       <a href="home.php">
         <img class="logo" src="Imagens/icone-elegance.png" alt="Logo Elegance">
@@ -401,47 +374,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
-<div class="pagina-alterar-infos"> <h1>Informações Pessoais</h1>
 
-    <form action="alterarinfos.php" method="POST" class="form-infos">
+<div class="pagina-gerenciar"> <div class="admin-header">
+        <h1>Gerenciar Produtos</h1>
+        <a href="AdicionarProd.php" class="btn-adicionar">
+            <span>➕</span> Adicionar Novo
+        </a>
+    </div>
+
+    <div class="grid-produtos">
         
-        <div class="campo">
-            <label>Nome:</label>
-            <input type="text" name="nome" class="input-texto" value="<?php echo htmlspecialchars($infos['nome']); ?>" required>
-        </div>
+        <?php while ($p = $produtos->fetch()): ?>
+            
+            <div class="card-admin">
+                <div class="img-wrapper">
+                    <img src="<?= $p['foto']; ?>" alt="<?= $p['nome']; ?>">
+                </div>
 
-        <div class="campo">
-            <label>CPF:</label>
-            <input type="text" name="cpf" class="input-texto" value="<?php echo htmlspecialchars($infos['CPF']); ?>" required>
-        </div>
+                <div class="card-info">
+                    <strong><?= $p['nome']; ?></strong>
+                    <p class="preco">R$ <?= number_format($p['preco'], 2, ',', '.'); ?></p>
+                </div>
 
-        <div class="campo">
-            <label>CEP:</label>
-            <input type="text" id="cep" name="cep" class="input-texto" value="<?php echo htmlspecialchars($infos['CEP']); ?>" onblur="buscaCep()" required>
-        </div>
-
-        <div class="campo">
-            <label>Rua:</label>
-            <input type="text" id="rua" name="rua" class="input-texto" value="<?php echo htmlspecialchars($infos['rua']); ?>">
-        </div>
-
-        <div class="linha-dupla">
-            <div class="campo metade">
-                <label>Número:</label>
-                <input type="text" name="numero" class="input-texto" value="<?php echo htmlspecialchars($infos['numero']); ?>">
+                <div class="card-actions">
+                    <a href="EditarProdutos.php?id=<?= $p['id']; ?>" class="btn-editar">
+                        ✏ Editar
+                    </a>
+                    <a href="../Scripts/removerproduto.php?id=<?= $p['id']; ?>" class="btn-excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                        🗑 Excluir
+                    </a>
+                </div>
             </div>
 
-            <div class="campo metade">
-                <label>Complemento:</label>
-                <input type="text" name="complemento" class="input-texto" value="<?php echo htmlspecialchars($infos['complemento']); ?>">
-            </div>
-        </div>
+        <?php endwhile; ?>
 
-        <input type="submit" value="Salvar Alterações" class="btn-salvar">
-    </form>
-
-    <div class="area-voltar">
-        <a href="dashboard.php"><button class="btn-voltar">Voltar ao Perfil</button></a>
+    </div> <div class="area-voltar-admin">
+        <a href="home.php"><button class="btn-voltar">Voltar ao Site</button></a>
     </div>
 
 </div>
@@ -511,8 +479,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 
 </html>
+

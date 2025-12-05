@@ -1,103 +1,26 @@
-<?php
-require 'config.php';
-session_start();
-if (!isset($_SESSION['usuario_id'])) {
+<?php 
+require '../Scripts/config.php';
+session_start();  
+if(!isset($_SESSION['usuario_id'])){
   $cep = '00000-000';
-} else {
+}else {
   $cep = $_SESSION["usuario_cep"];
 }
 ?>
-
-<?php
-require 'config.php';
-
-$erro = "";
-$ok = "";
-
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-    $nome = trim($_POST["nome"]);
-    $email = trim($_POST["email"]);
-    $senha = trim($_POST["senha"]);
-    $cep = trim($_POST["cep"]);
-    $rua = $_POST['rua'];
-    $Bairro = $_POST['bairro'];
-    $Cidade = $_POST['cidade'];
-    $Estado = $_POST['estado'];
-    $Complemento = $_POST['complemento'];
-    $Numero = $_POST['numero'];
-
-    //  VALIDA CAMPOS OBRIGATÓRIOS
-    if(empty($nome) || empty($email) || empty($senha) || empty($cep)){
-        $erro = "Preencha todos os campos obrigatórios!";
-    } 
-    else {
-
-        //  VALIDA E-MAIL
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $erro = "E-mail inválido!";
-        }
-
-        //  VALIDA SENHA
-        elseif (strlen($senha) < 6) {
-            $erro = "A senha deve ter pelo menos 6 caracteres!";
-        }
-        elseif (!preg_match("/[0-9]/", $senha)) {
-            $erro = "A senha deve conter pelo menos um número!";
-        }
-        elseif (!preg_match("/[^a-zA-Z0-9]/", $senha)) {
-            $erro = "A senha deve conter pelo menos um caractere especial!";
-        }
-
-        // Se NÃO houver erro, prosseguir com cadastro
-        else {
-
-            //  UPLOAD DE FOTO
-            $foto = "";
-            if(!empty($_FILES["foto"]["name"])){
-                $foto = "uploads/" . uniqid() . "_" . $_FILES["foto"]["name"];
-                move_uploaded_file($_FILES["foto"]["tmp_name"], $foto);
-            }
-
-            //  SALVA NO BANCO
-            $stmt = $pdo->prepare("INSERT INTO usuario 
-                (nome,email,senha,foto,cep,rua,numero,complemento,Bairro,Estado,Cidade)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-
-            $stmt->execute([
-                $nome,
-                $email,
-                password_hash($senha, PASSWORD_DEFAULT),
-                $foto ?: null,
-                $cep,
-                $rua,
-                $Numero,
-                $Complemento,
-                $Bairro,
-                $Estado,
-                $Cidade
-            ]);
-
-            header("Location: login.php");
-            exit;
-        }
-    }
-}
-?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="Imagens/icone-topo.png">
-    <title>Elegance PH</title>
-    <link rel="stylesheet" href="stylev2.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="Imagens/icone-topo.png">
+  <link rel="stylesheet" href="../Estilos/stylev2.css">
+  <<title>Elegance PH</title>
 </head>
+
 <body>
 
-<!-- HEADER MENU INICIO AAAAA-->
+  <!-- HEADER MENU INICIO AAAAA-->
 
   <header class="menu">
     <div class="area-logo">
@@ -442,95 +365,30 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
  <!-- HEADER MENU ESTILIZADO FIM AAA-->
 
-<div class="pagina-cadastro">
+  <div class="text-content">
+    <h2>Política de Frete</h2>
+    <h4>
+      <p>A entrega é sempre feita pelos Correios, porém, em alguns casos, como destinatário ausente, regiões com restrição de entrega, entre outros motivos, os Correios poderão deixar um aviso para retirar os produtos na agência mais próxima do endereço fornecido.</p>
+      <p>Alguns produtos apresentados em nosso site não se encontram no Brasil e são enviados diretamente de nossos fabricantes localizados na China.</p>
+      <p>O prazo de postagem dos produtos começa a vigorar logo após a aprovação de pagamento da compra, que pode variar de 1 a 3 dias úteis.</p>
+      <p>O prazo médio estimado de entrega dos produtos é de até 15-25 dias úteis, podendo haver variações por parte dos Correios e da Receita Federal.</p>
+      <p>Caso ocorra algum tipo de atraso nos Correios internacionais, esse prazo pode ser prolongado de até 15-20 dias.</p>
+      <p>*Áreas com restrição de entrega terão que ser retiradas na agência dos Correios.</p>
+      <p>Todas as compras possuem código de rastreamento enviado ao WhatsApp do cliente dentro do prazo de 10 dias úteis após a confirmação do pedido.</p>
+      <p>Caso o pedido seja de 2 ou mais produtos, os mesmos poderão ser enviados em fretes separados com códigos de rastreamento individuais.</p>
+      <p>Pedimos atenção no preenchimento do endereço de entrega para garantir que a mesma seja feita dentro do prazo estabelecido.</p>
+      <p>Por se tratar de encomenda internacional, as informações de rastreamento podem ocorrer entre 2 a 7 dias após informarmos o código.</p>
+      <p>Produtos danificados durante o transporte são da responsabilidade dos serviços postais.</p>
+      <p>O preenchimento do endereço deve ser revisado pelo comprador antes da confirmação da compra, havendo devolução por endereço incorreto será de responsabilidade do cliente.</p>
+      <p>Em caso de tentativa de entrega sem sucesso, os produtos ficarão na agência à disposição do cliente, podendo ser devolvidos ao remetente no exterior.</p>
+      <p>Após confirmação de reenvio, o prazo de entrega começa a valer novamente.</p>
+      <p>Por se tratar de importação, toda mercadoria está sujeita a burocracias ou tributações alfandegárias.</p>
+      <p>TRIBUTAÇÃO ALFANDEGÁRIA: Todos os produtos enviados do exterior estão sujeitos a tributação alfandegária. O valor das tarifas é de 20 a 30 reais. O pagamento da taxa é de responsabilidade do cliente.</p>
+      <p>O tempo de estimativa de entrega é apenas uma base. Pedimos paciência, pois os produtos importados podem demorar.</p>
+    </h4>
+  </div>
 
-    <div class="card-cadastro">
-        <div class="header-cadastro">
-            <h2>Crie sua conta</h2>
-            <p>Preencha os dados abaixo para se registrar.</p>
-        </div>
-
-        <?php if (!empty($erro)): ?>
-            <div class="msg-erro-login">⚠️ <?php echo $erro ?></div>
-        <?php endif; ?>
-
-        <form method="POST" enctype="multipart/form-data" class="form-grid-cadastro">
-            
-            <div class="coluna-form">
-                <h3 class="titulo-secao-form">Dados de Acesso</h3>
-                
-                <div class="grupo-input">
-                    <label>Nome Completo</label>
-                    <input type="text" name="nome" class="input-padrao" required>
-                </div>
-
-                <div class="grupo-input">
-                    <label>Email</label>
-                    <input type="email" name="email" class="input-padrao" required>
-                </div>
-
-                <div class="grupo-input">
-                    <label>Senha</label>
-                    <input type="password" name="senha" class="input-padrao" required>
-                </div>
-
-                <div class="grupo-input">
-                    <label>Foto de Perfil (Opcional)</label>
-                    <input type="file" name="foto" accept="image/*" class="input-file-simples">
-                </div>
-            </div>
-
-            <div class="coluna-form">
-                <h3 class="titulo-secao-form">Endereço</h3>
-
-                <div class="grupo-input">
-                    <label>CEP</label>
-                    <input type="text" id="cep" name="cep" class="input-padrao" required>
-                </div>
-
-                <div class="linha-dupla">
-                    <div class="grupo-input metade">
-                        <label>Rua</label>
-                        <input type="text" id="rua" name="rua" class="input-padrao" required>
-                    </div>
-                     <div class="grupo-input metade">
-                        <label>Número</label>
-                        <input type="text" name="numero" class="input-padrao" required>
-                    </div>
-                </div>
-
-                <div class="grupo-input">
-                    <label>Bairro</label>
-                    <input type="text" id="bairro" name="bairro" class="input-padrao">
-                </div>
-
-                <div class="linha-dupla">
-                    <div class="grupo-input metade">
-                        <label>Cidade</label>
-                        <input type="text" id="cidade" name="cidade" class="input-padrao">
-                    </div>
-                    <div class="grupo-input metade">
-                        <label>Estado</label>
-                        <input type="text" id="estado" name="estado" class="input-padrao">
-                    </div>
-                </div>
-
-                <div class="grupo-input">
-                    <label>Complemento</label>
-                    <input type="text" name="complemento" class="input-padrao" required>
-                </div>
-            </div>
-
-            <div class="area-btn-cadastro">
-                <button type="submit" class="btn-cadastrar">Finalizar Cadastro</button>
-                <a href="login.php" class="link-voltar">Já tenho conta</a>
-            </div>
-
-        </form>
-    </div>
-</div>
-
-<!-- rodape --> 
+  <!-- rodape --> 
 <a class="WhtsAppFixo" href="https://wa.me/5513991462611" target="_blank" title="Fale conosco no WhatsApp">
   <img src="Imagens/zap.png" alt="WhatsApp">
 </a>
@@ -595,10 +453,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+  <script src="../Estilos/Eleganceph.js"></script>
 
 </body>
-
 </html>
-
-

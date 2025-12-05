@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../Scripts/config.php';
 session_start();
 if (!isset($_SESSION['usuario_id'])) {
   $cep = '00000-000';
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mkdir('uploads', 0777, true);
         }
 
-        $novo_nome = "uploads/" . uniqid() . "_" . basename($_FILES["novafoto"]["name"]);
+        $novo_nome = "../uploads/" . uniqid() . "_" . basename($_FILES["novafoto"]["name"]);
 
         if (move_uploaded_file($_FILES["novafoto"]["tmp_name"], $novo_nome)) {
 
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="Imagens/icone-topo.png">
-    <link rel="stylesheet" href="stylev2.css">
+    <link rel="stylesheet" href="../Estilos/stylev2.css">
     <title>Elegance PH</title>
 </head>
 <body>
@@ -507,7 +507,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </footer>
 
-<script src="Eleganceph.js"></script>
+<script src="../Estilos/Eleganceph.js"></script>
 
 </body>
 
